@@ -33,7 +33,7 @@
 #include "weapon_physcannon.h"
 #include "script_intro.h"
 #include "effect_dispatch_data.h"
-#include "te_effect_dispatch.h" 
+#include "te_effect_dispatch.h"
 #include "ai_basenpc.h"
 #include "AI_Criteria.h"
 #include "npc_barnacle.h"
@@ -83,8 +83,8 @@ extern int gEvilImpulse101;
 
 ConVar sv_autojump( "sv_autojump", "0" );
 
-ConVar hl2_walkspeed( "hl2_walkspeed", "150", FCVAR_REPLICATED );
-ConVar hl2_normspeed( "hl2_normspeed", "190", FCVAR_REPLICATED );
+ConVar hl2_walkspeed( "hl2_walkspeed", "320", FCVAR_REPLICATED );
+ConVar hl2_normspeed( "hl2_normspeed", "320", FCVAR_REPLICATED );
 ConVar hl2_sprintspeed( "hl2_sprintspeed", "320", FCVAR_REPLICATED );
 
 #define	HL2_WALK_SPEED hl2_walkspeed.GetFloat()
@@ -194,7 +194,7 @@ public:
 	COutputEvent m_PlayerHasAmmo;
 	COutputEvent m_PlayerHasNoAmmo;
 	COutputEvent m_PlayerDied;
-	COutputEvent m_PlayerMissedAR2AltFire; // Player fired a combine ball which did not dissolve any enemies. 
+	COutputEvent m_PlayerMissedAR2AltFire; // Player fired a combine ball which did not dissolve any enemies.
 
 	COutputInt m_RequestedPlayerHealth;
 
@@ -327,7 +327,7 @@ BEGIN_DATADESC( CHL2_Player )
 	*/
 
 	// 	Field is used within a single tick, no need to save restore
-	// DEFINE_FIELD( m_bPlayUseDenySound, FIELD_BOOLEAN ),  
+	// DEFINE_FIELD( m_bPlayUseDenySound, FIELD_BOOLEAN ),
 	//							m_pPlayerAISquad reacquired on load
 
 	DEFINE_AUTO_ARRAY( m_vecMissPositions, FIELD_POSITION_VECTOR ),
@@ -443,18 +443,18 @@ void CHL2_Player::Precache( void )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 void CHL2_Player::CheckSuitZoom( void )
 {
-//#ifndef _XBOX 
+//#ifndef _XBOX
 	//Adrian - No zooming without a suit!
 	if ( IsSuitEquipped() )
 	{
 		if ( m_afButtonReleased & IN_ZOOM )
 		{
 			StopZooming();
-		}	
+		}
 		else if ( m_afButtonPressed & IN_ZOOM )
 		{
 			StartZooming();
@@ -467,7 +467,7 @@ void CHL2_Player::EquipSuit( bool bPlayEffects )
 {
 	MDLCACHE_CRITICAL_SECTION();
 	BaseClass::EquipSuit();
-	
+
 	m_HL2Local.m_bDisplayReticle = true;
 
 	if ( bPlayEffects == true )
@@ -636,22 +636,22 @@ void CHL2_Player::PreThink(void)
 #endif//HL2_EPISODIC
 
 	// Riding a vehicle?
-	if ( IsInAVehicle() )	
+	if ( IsInAVehicle() )
 	{
 		VPROF( "CHL2_Player::PreThink-Vehicle" );
 		// make sure we update the client, check for timed damage and update suit even if we are in a vehicle
-		UpdateClientData();		
+		UpdateClientData();
 		CheckTimeBasedDamage();
 
 		// Allow the suit to recharge when in the vehicle.
 		CheckSuitUpdate();
 		CheckSuitZoom();
 
-		WaterMove();	
+		WaterMove();
 		return;
 	}
 
-	// This is an experiment of mine- autojumping! 
+	// This is an experiment of mine- autojumping!
 	// only affects you if sv_autojump is nonzero.
 	if( (GetFlags() & FL_ONGROUND) && sv_autojump.GetFloat() != 0 )
 	{
@@ -671,7 +671,7 @@ void CHL2_Player::PreThink(void)
 			trace_t tr;
 
 			UTIL_TraceHull( WorldSpaceCenter() - Vector( 0, 0, 16 ), vecCheckDir, NAI_Hull::Mins(HULL_TINY_CENTERED),NAI_Hull::Maxs(HULL_TINY_CENTERED), MASK_PLAYERSOLID, this, COLLISION_GROUP_PLAYER, &tr );
-			
+
 			//NDebugOverlay::Line( tr.startpos, tr.endpos, 0,255,0, true, 10 );
 
 			if( tr.fraction == 1.0 && !tr.startsolid )
@@ -748,7 +748,7 @@ void CHL2_Player::PreThink(void)
 	else
 		m_Local.m_iHideHUD |= HIDEHUD_FLASHLIGHT;
 
-	
+
 	VPROF_SCOPE_BEGIN( "CHL2_Player::PreThink-CommanderUpdate" );
 	CommanderUpdate();
 	VPROF_SCOPE_END();
@@ -762,7 +762,7 @@ void CHL2_Player::PreThink(void)
 	VPROF_SCOPE_BEGIN( "CHL2_Player::PreThink-UpdateClientData" );
 	UpdateClientData();
 	VPROF_SCOPE_END();
-	
+
 	VPROF_SCOPE_BEGIN( "CHL2_Player::PreThink-CheckTimeBasedDamage" );
 	CheckTimeBasedDamage();
 	VPROF_SCOPE_END();
@@ -792,7 +792,7 @@ void CHL2_Player::PreThink(void)
 	//
 	if ( m_afPhysicsFlags & PFLAG_DIROVERRIDE )
 		AddFlag( FL_ONTRAIN );
-	else 
+	else
 		RemoveFlag( FL_ONTRAIN );
 
 	// Train speed control
@@ -806,7 +806,7 @@ void CHL2_Player::PreThink(void)
 			if ( !(pTrain->ObjectCaps() & FCAP_DIRECTIONAL_USE) )
 				pTrain = NULL;
 		}
-		
+
 		if ( !pTrain )
 		{
 			if ( GetActiveWeapon() && (GetActiveWeapon()->ObjectCaps() & FCAP_DIRECTIONAL_USE) )
@@ -831,7 +831,7 @@ void CHL2_Player::PreThink(void)
 			{
 				trace_t trainTrace;
 				// Maybe this is on the other side of a level transition
-				UTIL_TraceLine( GetAbsOrigin(), GetAbsOrigin() + Vector(0,0,-38), 
+				UTIL_TraceLine( GetAbsOrigin(), GetAbsOrigin() + Vector(0,0,-38),
 					MASK_PLAYERSOLID_BRUSHONLY, this, COLLISION_GROUP_NONE, &trainTrace );
 
 				if ( trainTrace.fraction != 1.0 && trainTrace.m_pEnt )
@@ -873,7 +873,7 @@ void CHL2_Player::PreThink(void)
 			m_iTrain = TrainSpeed(pTrain->m_flSpeed, ((CFuncTrackTrain*)pTrain)->GetMaxSpeed());
 			m_iTrain |= TRAIN_ACTIVE|TRAIN_NEW;
 		}
-	} 
+	}
 	else if (m_iTrain & TRAIN_ACTIVE)
 	{
 		m_iTrain = TRAIN_NEW; // turn off train
@@ -904,7 +904,7 @@ void CHL2_Player::PreThink(void)
 				}
 			}
 		} while ( pBarnacle );
-		
+
 		if ( !bOnBarnacle )
 		{
 			Warning( "Attached to barnacle?\n" );
@@ -971,13 +971,13 @@ void CHL2_Player::StartAdmireGlovesAnimation( void )
 	{
 		vm->SetWeaponModel( "models/weapons/v_hands.mdl", NULL );
 		ShowViewModel( true );
-						
+
 		int	idealSequence = vm->SelectWeightedSequence( ACT_VM_IDLE );
-		
+
 		if ( idealSequence >= 0 )
 		{
 			vm->SendViewModelMatchingSequence( idealSequence );
-			m_flAdmireGlovesAnimTime = gpGlobals->curtime + vm->SequenceDuration( idealSequence ); 
+			m_flAdmireGlovesAnimTime = gpGlobals->curtime + vm->SequenceDuration( idealSequence );
 		}
 	}
 }
@@ -1076,7 +1076,7 @@ bool CHL2_Player::HandleInteraction(int interactionType, void *data, CBaseCombat
 {
 	if ( interactionType == g_interactionBarnacleVictimDangle )
 		return false;
-	
+
 	if (interactionType ==	g_interactionBarnacleVictimReleased)
 	{
 		m_afPhysicsFlags &= ~PFLAG_ONBARNACLE;
@@ -1126,7 +1126,7 @@ void CHL2_Player::PlayerRunCommand(CUserCmd *ucmd, IMoveHelper *moveHelper)
 	if ( ( ucmd->forwardmove != 0 ) || ( ucmd->sidemove != 0 ) || ( ucmd->upmove != 0 ) )
 	{
 		m_flIdleTime -= TICK_INTERVAL * 2.0f;
-		
+
 		if ( m_flIdleTime < 0.0f )
 		{
 			m_flIdleTime = 0.0f;
@@ -1142,14 +1142,14 @@ void CHL2_Player::PlayerRunCommand(CUserCmd *ucmd, IMoveHelper *moveHelper)
 	else
 	{
 		m_flIdleTime += TICK_INTERVAL;
-		
+
 		if ( m_flIdleTime > 4.0f )
 		{
 			m_flIdleTime = 4.0f;
 		}
 
 		m_flMoveTime -= TICK_INTERVAL * 2.0f;
-		
+
 		if ( m_flMoveTime < 0.0f )
 		{
 			m_flMoveTime = 0.0f;
@@ -1195,7 +1195,7 @@ void CHL2_Player::Spawn(void)
 	// Setup our flashlight values
 #ifdef HL2_EPISODIC
 	m_HL2Local.m_flFlashBattery = 100.0f;
-#endif 
+#endif
 
 	GetPlayerProxy();
 
@@ -1212,7 +1212,7 @@ void CHL2_Player::UpdateLocatorPosition( const Vector &vecPosition )
 {
 #ifdef HL2_EPISODIC
 	m_HL2Local.m_vecLocatorOrigin = vecPosition;
-#endif//HL2_EPISODIC 
+#endif//HL2_EPISODIC
 }
 
 //-----------------------------------------------------------------------------
@@ -1228,7 +1228,7 @@ void CHL2_Player::InitSprinting( void )
 //-----------------------------------------------------------------------------
 bool CHL2_Player::CanSprint()
 {
-	return ( m_bSprintEnabled &&										// Only if sprint is enabled 
+	return ( m_bSprintEnabled &&										// Only if sprint is enabled
 			!( m_Local.m_bDucked && !m_Local.m_bDucking ) &&			// Nor if we're ducking
 			(GetWaterLevel() != 3) &&									// Certainly not underwater
 			(GlobalEntity_GetState("suit_no_sprint") != GLOBAL_ON) );	// Out of the question without the sprint module
@@ -1236,7 +1236,7 @@ bool CHL2_Player::CanSprint()
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void CHL2_Player::StartAutoSprint() 
+void CHL2_Player::StartAutoSprint()
 {
 	if( IsSprinting() )
 	{
@@ -1282,7 +1282,7 @@ void CHL2_Player::StopWalking( void )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
 bool CHL2_Player::CanZoom( CBaseEntity *pRequester )
@@ -1322,7 +1322,7 @@ void CHL2_Player::StartZooming( void )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 void CHL2_Player::StopZooming( void )
 {
@@ -1335,7 +1335,7 @@ void CHL2_Player::StopZooming( void )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
 bool CHL2_Player::IsZooming( void )
@@ -1366,7 +1366,7 @@ public:
 static CPhysicsPlayerCallback playerCallback;
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 void CHL2_Player::InitVCollision( const Vector &vecAbsOrigin, const Vector &vecAbsVelocity )
 {
@@ -1396,7 +1396,7 @@ bool CHL2_Player::CommanderFindGoal( commandgoal_t *pGoal )
 	Vector	forward;
 
 	EyeVectors( &forward );
-	
+
 	//---------------------------------
 	// MASK_SHOT on purpose! So that you don't hit the invisible hulls of the NPCs.
 	CTraceFilterSkipTwoEntities filter( this, PhysCannonGetHeldEntity( GetActiveWeapon() ), COLLISION_GROUP_INTERACTIVE_DEBRIS );
@@ -1441,9 +1441,9 @@ bool CHL2_Player::CommanderFindGoal( commandgoal_t *pGoal )
 		Vector mins( -16, -16, 0 );
 		Vector maxs( 16, 16, 0 );
 
-		// Back up from whatever we hit so that there's enough space at the 
+		// Back up from whatever we hit so that there's enough space at the
 		// target location for a bounding box.
-		// Now trace down. 
+		// Now trace down.
 		//UTIL_TraceLine( vecTarget, vecTarget - Vector( 0, 0, 8192 ), MASK_SOLID, this, COLLISION_GROUP_NONE, &tr );
 		UTIL_TraceHull( vecTarget + tr.plane.normal * 24,
 						vecTarget - Vector( 0, 0, 8192 ),
@@ -1479,7 +1479,7 @@ CAI_BaseNPC *CHL2_Player::GetSquadCommandRepresentative()
 	if ( m_pPlayerAISquad != NULL )
 	{
 		CAI_BaseNPC *pAllyNpc = m_pPlayerAISquad->GetFirstMember();
-		
+
 		if ( pAllyNpc )
 		{
 			return pAllyNpc->GetSquadCommandRepresentative();
@@ -1546,7 +1546,7 @@ void CHL2_Player::CommanderUpdate()
 		}
 
 		NDebugOverlay::ScreenText(
-			0.932, 0.919, 
+			0.932, 0.919,
 			CFmtStr( "%d|%c%s", GetNumSquadCommandables(), ( bFollowMode ) ? 'F' : 'S', pszMoving ),
 			255, 128, 0, 128,
 			0 );
@@ -1575,13 +1575,13 @@ void CHL2_Player::CommanderUpdate()
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //
 // bHandled - indicates whether to continue delivering this order to
 // all allies. Allows us to stop delivering certain types of orders once we find
 // a suitable candidate. (like picking up a single weapon. We don't wish for
 // all allies to respond and try to pick up one weapon).
-//----------------------------------------------------------------------------- 
+//-----------------------------------------------------------------------------
 bool CHL2_Player::CommanderExecuteOne( CAI_BaseNPC *pNpc, const commandgoal_t &goal, CAI_BaseNPC **Allies, int numAllies )
 {
 	if ( goal.m_pGoalEntity )
@@ -1592,7 +1592,7 @@ bool CHL2_Player::CommanderExecuteOne( CAI_BaseNPC *pNpc, const commandgoal_t &g
 	{
 		pNpc->MoveOrder( goal.m_vecGoalLocation, Allies, numAllies );
 	}
-	
+
 	return true;
 }
 
@@ -1664,13 +1664,13 @@ void CHL2_Player::CommanderExecute( CommanderCommand_t command )
 	int nAIs = g_AI_Manager.NumAIs();
 #endif
 	CAI_BaseNPC * pTargetNpc = (goal.m_pGoalEntity) ? goal.m_pGoalEntity->MyNPCPointer() : NULL;
-	
+
 	bool bHandled = false;
 	if( pTargetNpc )
 	{
 		bHandled = !CommanderExecuteOne( pTargetNpc, goal, Allies.Base(), Allies.Count() );
 	}
-	
+
 	for ( i = 0; !bHandled && i < Allies.Count(); i++ )
 	{
 		if ( Allies[i] != pTargetNpc && Allies[i]->IsPlayerAlly() )
@@ -1699,8 +1699,8 @@ void CHL2_Player::CommanderMode()
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : iImpulse - 
+// Purpose:
+// Input  : iImpulse -
 //-----------------------------------------------------------------------------
 void CHL2_Player::CheatImpulseCommands( int iImpulse )
 {
@@ -1716,7 +1716,7 @@ void CHL2_Player::CheatImpulseCommands( int iImpulse )
 	}
 
 	switch( iImpulse )
-	{	
+	{
 	case 51:
 	{
 		// Cheat to create a dynamic resupply item
@@ -1759,7 +1759,7 @@ void CHL2_Player::CheatImpulseCommands( int iImpulse )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 void CHL2_Player::SetupVisibility( CBaseEntity *pViewEntity, unsigned char *pvs, int pvssize )
 {
@@ -1776,7 +1776,7 @@ void CHL2_Player::SetupVisibility( CBaseEntity *pViewEntity, unsigned char *pvs,
 		if ( g_hIntroScript->GetIncludedPVSOrigin( &vecOrigin, &pCamera ) )
 		{
 			// If it's a point camera, turn it on
-			CPointCamera *pPointCamera = dynamic_cast< CPointCamera* >(pCamera); 
+			CPointCamera *pPointCamera = dynamic_cast< CPointCamera* >(pCamera);
 			if ( pPointCamera )
 			{
 				pPointCamera->SetActive( true );
@@ -1946,7 +1946,7 @@ bool CHL2_Player::SuitPower_RemoveDevice( const CSuitPowerDevice &device )
 		return false;
 
 	// Take a little bit of suit power when you disable a device. If the device is shutting off
-	// because the battery is drained, no harm done, the battery charge cannot go below 0. 
+	// because the battery is drained, no harm done, the battery charge cannot go below 0.
 	// This code in combination with the delay before the suit can start recharging are a defense
 	// against exploits where the player could rapidly tap sprint and never run out of power.
 	MsgPredTest2( "[Server %d] [A REMOVE] m_HL2Local.m_flSuitPower: %f\n", gpGlobals->tickcount, m_HL2Local.m_flSuitPower.Get() );
@@ -1977,7 +1977,7 @@ bool CHL2_Player::SuitPower_ShouldRecharge( void )
 
 	// Is the system fully charged?
 	if( m_HL2Local.m_flSuitPower >= 100.0f )
-		return false; 
+		return false;
 
 	// Has the system been in a no-load state for long enough
 	// to begin recharging?
@@ -1989,7 +1989,7 @@ bool CHL2_Player::SuitPower_ShouldRecharge( void )
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-ConVar	sk_battery( "sk_battery","0" );			
+ConVar	sk_battery( "sk_battery","0" );
 
 bool CHL2_Player::ApplyBattery( float powerMultiplier )
 {
@@ -2012,16 +2012,16 @@ bool CHL2_Player::ApplyBattery( float powerMultiplier )
 			WRITE_STRING( "item_battery" );
 		MessageEnd();
 
-		
+
 		// Suit reports new power level
 		// For some reason this wasn't working in release build -- round it.
 		pct = (int)( (float)(ArmorValue() * 100.0) * (1.0/MAX_NORMAL_BATTERY) + 0.5);
 		pct = (pct / 5);
 		if (pct > 0)
 			pct--;
-	
+
 		Q_snprintf( szcharge,sizeof(szcharge),"!HEV_%1dP", pct );
-		
+
 		//UTIL_EmitSoundSuit(edict(), szcharge);
 		//SetSuitUpdate(szcharge, FALSE, SUIT_NEXT_IN_30SEC);
 
@@ -2035,7 +2035,7 @@ bool CHL2_Player::ApplyBattery( float powerMultiplier )
 				gameeventmanager->FireEvent( event );
 			}
 		}
-		return true;		
+		return true;
 	}
 	return false;
 }
@@ -2103,7 +2103,7 @@ bool CHL2_Player::IsIlluminatedByFlashlight( CBaseEntity *pEntity, float *flRetu
 	if( pEntity->Classify() == CLASS_BARNACLE && pEntity->GetEnemy() == this )
 	{
 		// As long as my flashlight is on, the barnacle that's pulling me in is considered illuminated.
-		// This is because players often shine their flashlights at Alyx when they are in a barnacle's 
+		// This is because players often shine their flashlights at Alyx when they are in a barnacle's
 		// grasp, and wonder why Alyx isn't helping. Alyx isn't helping because the light isn't pointed
 		// at the barnacle. This will allow Alyx to see the barnacle no matter which way the light is pointed.
 		return true;
@@ -2210,7 +2210,7 @@ bool CHL2_Player::PassesDamageFilter( const CTakeDamageInfo &info )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 void CHL2_Player::SetFlashlightEnabled( bool bState )
 {
@@ -2253,7 +2253,7 @@ void CHL2_Player::InputIgnoreFallDamage( inputdata_t &inputdata )
 
 
 //-----------------------------------------------------------------------------
-// Purpose: Absolutely prevent the player from taking fall damage for [n] seconds. 
+// Purpose: Absolutely prevent the player from taking fall damage for [n] seconds.
 //-----------------------------------------------------------------------------
 void CHL2_Player::InputIgnoreFallDamageWithoutReset( inputdata_t &inputdata )
 {
@@ -2279,7 +2279,7 @@ void CHL2_Player::OnSquadMemberKilled( inputdata_t &data )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 void CHL2_Player::NotifyFriendsOfDamage( CBaseEntity *pAttackerEntity )
 {
@@ -2308,7 +2308,7 @@ void CHL2_Player::NotifyFriendsOfDamage( CBaseEntity *pAttackerEntity )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 ConVar test_massive_dmg("test_massive_dmg", "30" );
 ConVar test_massive_dmg_clip("test_massive_dmg_clip", "0.5" );
@@ -2348,7 +2348,7 @@ int	CHL2_Player::OnTakeDamage( const CTakeDamageInfo &info )
 		if ( info.GetAttacker() )
 			NotifyFriendsOfDamage( info.GetAttacker() );
 	}
-	
+
 	// Modify the amount of damage the player takes, based on skill.
 	CTakeDamageInfo playerDamage = info;
 
@@ -2381,8 +2381,8 @@ int	CHL2_Player::OnTakeDamage( const CTakeDamageInfo &info )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : &info - 
+// Purpose:
+// Input  : &info -
 //-----------------------------------------------------------------------------
 int CHL2_Player::OnTakeDamage_Alive( const CTakeDamageInfo &info )
 {
@@ -2553,7 +2553,7 @@ void CHL2_Player::GetAutoaimVector( autoaim_params_t &params )
 
 				params.m_vecAutoAimDir = vecDir;
 				params.m_vecAutoAimPoint = vecTarget;
-				return;		
+				return;
 			}
 			else
 			{
@@ -2606,17 +2606,17 @@ bool CHL2_Player::ShouldKeepLockedAutoaimTarget( EHANDLE hLockedTarget )
 	vecLooking = EyeDirection3D();
 	flDot = DotProduct( vecLooking, vecToTarget );
 
-	if( flDot < autoaim_unlock_target.GetFloat() ) 
+	if( flDot < autoaim_unlock_target.GetFloat() )
 		return false;
 
 	return true;
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : iCount - 
-//			iAmmoIndex - 
-//			bSuppressSound - 
+// Purpose:
+// Input  : iCount -
+//			iAmmoIndex -
+//			bSuppressSound -
 // Output : int
 //-----------------------------------------------------------------------------
 int CHL2_Player::GiveAmmo( int nCount, int nAmmoIndex, bool bSuppressSound)
@@ -2664,7 +2664,7 @@ int CHL2_Player::GiveAmmo( int nCount, int nAmmoIndex, bool bSuppressSound)
 //-----------------------------------------------------------------------------
 bool CHL2_Player::Weapon_CanUse( CBaseCombatWeapon *pWeapon )
 {
-#ifndef HL2MP	
+#ifndef HL2MP
 	if ( pWeapon->ClassMatches( "weapon_stunstick" ) )
 	{
 		if ( ApplyBattery( 0.5 ) )
@@ -2677,8 +2677,8 @@ bool CHL2_Player::Weapon_CanUse( CBaseCombatWeapon *pWeapon )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : *pWeapon - 
+// Purpose:
+// Input  : *pWeapon -
 //-----------------------------------------------------------------------------
 void CHL2_Player::Weapon_Equip( CBaseCombatWeapon *pWeapon )
 {
@@ -2700,7 +2700,7 @@ void CHL2_Player::Weapon_Equip( CBaseCombatWeapon *pWeapon )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: Player reacts to bumping a weapon. 
+// Purpose: Player reacts to bumping a weapon.
 // Input  : pWeapon - the weapon that the player bumped into.
 // Output : Returns true if player picked up the weapon
 //-----------------------------------------------------------------------------
@@ -2724,14 +2724,14 @@ bool CHL2_Player::BumpWeapon( CBaseCombatWeapon *pWeapon )
 	// ----------------------------------------
 	// If I already have it just take the ammo
 	// ----------------------------------------
-	if (Weapon_OwnsThisType( pWeapon->GetClassname(), pWeapon->GetSubType())) 
+	if (Weapon_OwnsThisType( pWeapon->GetClassname(), pWeapon->GetSubType()))
 	{
 		//Only remove the weapon if we attained ammo from it
 		if ( Weapon_EquipAmmoOnly( pWeapon ) == false )
 			return false;
 
 		// Only remove me if I have no ammo left
-		// Can't just check HasAnyAmmo because if I don't use clips, I want to be removed, 
+		// Can't just check HasAnyAmmo because if I don't use clips, I want to be removed,
 		if ( pWeapon->UsesClipsForAmmo1() && pWeapon->HasPrimaryAmmo() )
 			return false;
 
@@ -2741,7 +2741,7 @@ bool CHL2_Player::BumpWeapon( CBaseCombatWeapon *pWeapon )
 	// -------------------------
 	// Otherwise take the weapon
 	// -------------------------
-	else 
+	else
 	{
 		//Make sure we're not trying to take a new weapon type we already have
 		if ( Weapon_SlotOccupied( pWeapon ) )
@@ -2771,7 +2771,7 @@ bool CHL2_Player::BumpWeapon( CBaseCombatWeapon *pWeapon )
 		Weapon_Equip( pWeapon );
 
 		EmitSound( "HL2Player.PickupWeapon" );
-		
+
 		return true;
 	}
 #else
@@ -2783,8 +2783,8 @@ bool CHL2_Player::BumpWeapon( CBaseCombatWeapon *pWeapon )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : *cmd - 
+// Purpose:
+// Input  : *cmd -
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
 bool CHL2_Player::ClientCommand( const CCommand &args )
@@ -2818,7 +2818,7 @@ bool CHL2_Player::ClientCommand( const CCommand &args )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 // Output : void CBasePlayer::PlayerUse
 //-----------------------------------------------------------------------------
 void CHL2_Player::PlayerUse ( void )
@@ -2877,7 +2877,7 @@ void CHL2_Player::PlayerUse ( void )
 	// Found an object
 	if ( pUseEntity )
 	{
-		//!!!UNDONE: traceline here to prevent +USEing buttons through walls			
+		//!!!UNDONE: traceline here to prevent +USEing buttons through walls
 		int caps = pUseEntity->ObjectCaps();
 		variant_t emptyVariant;
 
@@ -2982,7 +2982,7 @@ void CHL2_Player::UpdateWeaponPosture( void )
 				{
 					int text_offset = BaseClass::DrawDebugTextOverlays();
 
-					char tempstr[255];	
+					char tempstr[255];
 
 					switch ( dis )
 					{
@@ -3117,7 +3117,7 @@ bool CHL2_Player::Weapon_Ready( void )
 
 //-----------------------------------------------------------------------------
 // Purpose: Returns whether or not we can switch to the given weapon.
-// Input  : pWeapon - 
+// Input  : pWeapon -
 //-----------------------------------------------------------------------------
 bool CHL2_Player::Weapon_CanSwitchTo( CBaseCombatWeapon *pWeapon )
 {
@@ -3138,7 +3138,7 @@ bool CHL2_Player::Weapon_CanSwitchTo( CBaseCombatWeapon *pWeapon )
 
 	if ( GetActiveWeapon() )
 	{
-		if ( PhysCannonGetHeldEntity( GetActiveWeapon() ) == pWeapon && 
+		if ( PhysCannonGetHeldEntity( GetActiveWeapon() ) == pWeapon &&
 			Weapon_OwnsThisType( pWeapon->GetClassname(), pWeapon->GetSubType()) )
 		{
 			return true;
@@ -3156,7 +3156,7 @@ void CHL2_Player::PickupObject( CBaseEntity *pObject, bool bLimitMassAndSize )
 	// can't pick up what you're standing on
 	if ( GetGroundEntity() == pObject )
 		return;
-	
+
 	if ( bLimitMassAndSize == true )
 	{
 		if ( CBasePlayer::CanPickupObject( pObject, 35, 128 ) == false )
@@ -3171,7 +3171,7 @@ void CHL2_Player::PickupObject( CBaseEntity *pObject, bool bLimitMassAndSize )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 // Output : CBaseEntity
 //-----------------------------------------------------------------------------
 bool CHL2_Player::IsHoldingEntity( CBaseEntity *pEnt )
@@ -3226,7 +3226,7 @@ void CHL2_Player::InputForceDropPhysObjects( inputdata_t &data )
 
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 void CHL2_Player::UpdateClientData( void )
 {
@@ -3268,11 +3268,11 @@ void CHL2_Player::UpdateClientData( void )
 			WRITE_FLOAT( damageOrigin.y );	//BUG: However, the HUD does _not_ implement bitfield messages (yet)
 			WRITE_FLOAT( damageOrigin.z );	//BUG: We use WRITE_VEC3COORD for everything else
 		MessageEnd();
-	
+
 		m_DmgTake = 0;
 		m_DmgSave = 0;
 		m_bitsHUDDamage = m_bitsDamageType;
-		
+
 		// Clear off non-time-based damage indicators
 		int iTimeBasedDamage = g_pGameRules->Damage_GetTimeBased();
 		m_bitsDamageType &= iTimeBasedDamage;
@@ -3341,7 +3341,7 @@ Vector CHL2_Player::EyeDirection3D( void )
 		EyeVectors( &vecForward );
 		return vecForward;
 	}
-	
+
 	AngleVectors( EyeAngles(), &vecForward );
 	return vecForward;
 }
@@ -3409,7 +3409,7 @@ bool LineCircleIntersection(
 	// Translate circle to origin.
 	P[0] = vLinePt[0] - center[0];
 	P[1] = vLinePt[1] - center[1];
-	
+
 	a = vLineDir.Dot(vLineDir);
 	b = 2.0f * P.Dot(vLineDir);
 	c = P.Dot(P) - (radius * radius);
@@ -3422,7 +3422,7 @@ bool LineCircleIntersection(
 	sqr = (float)FastSqrt(insideSqr);
 
 	float denom = 1.0 / (2.0f * a);
-	
+
 	*fIntersection1 = (-b - sqr) * denom;
 	*fIntersection2 = (-b + sqr) * denom;
 
@@ -3441,7 +3441,7 @@ static void Collision_ClearTrace( const Vector &vecRayStart, const Vector &vecRa
 }
 
 
-bool IntersectRayWithAACylinder( const Ray_t &ray, 
+bool IntersectRayWithAACylinder( const Ray_t &ray,
 	const Vector &center, float radius, float height, CBaseTrace *pTrace )
 {
 	Assert( ray.m_IsRay );
@@ -3511,7 +3511,7 @@ bool IntersectRayWithAACylinder( const Ray_t &ray,
 	// Calculate the point on our center line where we're nearest the intersection point
 	Vector collisionCenter;
 	CalcClosestPointOnLineSegment( pTrace->endpos, center + Vector( 0, 0, halfHeight ), center - Vector( 0, 0, halfHeight ), collisionCenter );
-	
+
 	// Our normal is the direction from that center point to the intersection point
 	pTrace->plane.normal = pTrace->endpos - collisionCenter;
 	VectorNormalize( pTrace->plane.normal );
@@ -3552,7 +3552,7 @@ bool CHL2_Player::TestHitboxes( const Ray_t &ray, unsigned int fContentsMask, tr
 			tr.surface.flags = SURF_HITBOX;
 			tr.surface.surfaceProps = physprops->GetSurfaceIndex( pBone->pszSurfaceProp() );
 		}
-		
+
 		return true;
 	}
 }
@@ -3561,12 +3561,12 @@ bool CHL2_Player::TestHitboxes( const Ray_t &ray, unsigned int fContentsMask, tr
 // Show the player's scaled down bbox that we use for
 // bullet impacts.
 //---------------------------------------------------------
-void CHL2_Player::DrawDebugGeometryOverlays(void) 
+void CHL2_Player::DrawDebugGeometryOverlays(void)
 {
 	BaseClass::DrawDebugGeometryOverlays();
 
-	if (m_debugOverlays & OVERLAY_BBOX_BIT) 
-	{	
+	if (m_debugOverlays & OVERLAY_BBOX_BIT)
+	{
 		Vector mins, maxs;
 
 		mins = WorldAlignMins();
@@ -3589,7 +3589,7 @@ void CHL2_Player::ExitLadder()
 {
 	if ( MOVETYPE_LADDER != GetMoveType() )
 		return;
-	
+
 	SetMoveType( MOVETYPE_WALK );
 	SetMoveCollide( MOVECOLLIDE_DEFAULT );
 	// Remove from ladder
@@ -3674,7 +3674,7 @@ void CHL2_Player::StopWaterDeathSounds( void )
 }
 
 //-----------------------------------------------------------------------------
-// 
+//
 //-----------------------------------------------------------------------------
 void CHL2_Player::MissedAR2AltFire()
 {
@@ -3739,7 +3739,7 @@ const impactdamagetable_t &CHL2_Player::GetPhysicsImpactDamageTable()
 {
 	if ( m_bUseCappedPhysicsDamageTable )
 		return gCappedPlayerImpactDamageTable;
-	
+
 	return BaseClass::GetPhysicsImpactDamageTable();
 }
 
@@ -3754,7 +3754,7 @@ void CHL2_Player::Splash( void )
 	data.m_vOrigin = GetAbsOrigin();
 	data.m_vNormal = Vector(0,0,1);
 	data.m_vAngles = QAngle( 0, 0, 0 );
-	
+
 	if ( GetWaterType() & CONTENTS_SLIME )
 	{
 		data.m_fFlags |= FX_WATER_IN_SLIME;

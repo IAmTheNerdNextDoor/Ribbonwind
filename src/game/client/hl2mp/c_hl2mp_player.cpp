@@ -17,7 +17,7 @@
 
 // Don't alias here
 #if defined( CHL2MP_Player )
-#undef CHL2MP_Player	
+#undef CHL2MP_Player
 #endif
 
 // misyl: Can be set to Msg if you want some info for debugging prediction
@@ -69,8 +69,8 @@ BEGIN_PREDICTION_DATA( C_HL2MP_Player )
 	DEFINE_PRED_ARRAY( m_iAmmo, FIELD_INTEGER, MAX_AMMO_TYPES, FTYPEDESC_INSENDTABLE | FTYPEDESC_OVERRIDE | FTYPEDESC_NOERRORCHECK ),
 END_PREDICTION_DATA()
 
-ConVar hl2_walkspeed( "hl2_walkspeed", "150", FCVAR_REPLICATED );
-ConVar hl2_normspeed( "hl2_normspeed", "190", FCVAR_REPLICATED );
+ConVar hl2_walkspeed( "hl2_walkspeed", "320", FCVAR_REPLICATED );
+ConVar hl2_normspeed( "hl2_normspeed", "320", FCVAR_REPLICATED );
 ConVar hl2_sprintspeed( "hl2_sprintspeed", "320", FCVAR_REPLICATED );
 
 #define	HL2_WALK_SPEED hl2_walkspeed.GetFloat()
@@ -139,7 +139,7 @@ void C_HL2MP_Player::UpdateIDTarget()
 	m_iIDEntIndex = 0;
 
 	// don't show IDs in chase spec mode
-	if ( GetObserverMode() == OBS_MODE_CHASE || 
+	if ( GetObserverMode() == OBS_MODE_CHASE ||
 		 GetObserverMode() == OBS_MODE_DEATHCAM )
 		 return;
 
@@ -165,7 +165,7 @@ void C_HL2MP_Player::TraceAttack( const CTakeDamageInfo &info, const Vector &vec
 	Vector vecOrigin = ptr->endpos - vecDir * 4;
 
 	float flDistance = 0.0f;
-	
+
 	if ( info.GetAttacker() )
 	{
 		flDistance = (ptr->endpos - info.GetAttacker()->GetAbsOrigin()).Length();
@@ -176,7 +176,7 @@ void C_HL2MP_Player::TraceAttack( const CTakeDamageInfo &info, const Vector &vec
 		AddMultiDamage( info, this );
 
 		int blood = BloodColor();
-		
+
 		CBaseEntity *pAttacker = info.GetAttacker();
 
 		if ( pAttacker )
@@ -217,7 +217,7 @@ void C_HL2MP_Player::Initialize( void )
 CStudioHdr *C_HL2MP_Player::OnNewModel( void )
 {
 	CStudioHdr *hdr = BaseClass::OnNewModel();
-	
+
 	Initialize( );
 
 	return hdr;
@@ -255,7 +255,7 @@ void C_HL2MP_Player::UpdateLookAt( void )
 
 	float flBodyYawDiff = bodyAngles[YAW] - m_flLastBodyYaw;
 	m_flLastBodyYaw = bodyAngles[YAW];
-	
+
 
 	// Set the head's yaw.
 	float desired = AngleNormalize( desiredAngles[YAW] - bodyAngles[YAW] );
@@ -265,14 +265,14 @@ void C_HL2MP_Player::UpdateLookAt( void )
 	// Counterrotate the head from the body rotation so it doesn't rotate past its target.
 	m_flCurrentHeadYaw = AngleNormalize( m_flCurrentHeadYaw - flBodyYawDiff );
 	desired = clamp( desired, m_headYawMin, m_headYawMax );
-	
+
 	SetPoseParameter( m_headYawPoseParam, m_flCurrentHeadYaw );
 
-	
+
 	// Set the head's yaw.
 	desired = AngleNormalize( desiredAngles[PITCH] );
 	desired = clamp( desired, m_headPitchMin, m_headPitchMax );
-	
+
 	m_flCurrentHeadPitch = ApproachAngle( desired, m_flCurrentHeadPitch, 130 * gpGlobals->frametime );
 	m_flCurrentHeadPitch = AngleNormalize( m_flCurrentHeadPitch );
 	SetPoseParameter( m_headPitchPoseParam, m_flCurrentHeadPitch );
@@ -281,7 +281,7 @@ void C_HL2MP_Player::UpdateLookAt( void )
 void C_HL2MP_Player::ClientThink( void )
 {
 	bool bFoundViewTarget = false;
-	
+
 	Vector vForward;
 	AngleVectors( GetLocalAngles(), &vForward );
 
@@ -298,8 +298,8 @@ void C_HL2MP_Player::ClientThink( void )
 		Vector vMyOrigin =  GetAbsOrigin();
 
 		Vector vDir = vTargetOrigin - vMyOrigin;
-		
-		if ( vDir.Length() > 128 ) 
+
+		if ( vDir.Length() > 128 )
 			continue;
 
 		VectorNormalize( vDir );
@@ -321,7 +321,7 @@ void C_HL2MP_Player::ClientThink( void )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 int C_HL2MP_Player::DrawModel( int flags )
 {
@@ -481,7 +481,7 @@ bool C_HL2MP_Player::SuitPower_RemoveDevice( const CSuitPowerDevice &device )
 		return false;
 
 	// Take a little bit of suit power when you disable a device. If the device is shutting off
-	// because the battery is drained, no harm done, the battery charge cannot go below 0. 
+	// because the battery is drained, no harm done, the battery charge cannot go below 0.
 	// This code in combination with the delay before the suit can start recharging are a defense
 	// against exploits where the player could rapidly tap sprint and never run out of power.
 	MsgPredTest2( "[Client %d] [A REMOVE] m_HL2Local.m_flSuitPower: %f\n", gpGlobals->tickcount, m_HL2Local.m_flSuitPower );
@@ -512,7 +512,7 @@ bool C_HL2MP_Player::SuitPower_ShouldRecharge( void )
 
 	// Is the system fully charged?
 	if( m_HL2Local.m_flSuitPower >= 100.0f )
-		return false; 
+		return false;
 
 	// Has the system been in a no-load state for long enough
 	// to begin recharging?
@@ -571,7 +571,7 @@ void C_HL2MP_Player::SuitPower_Update( void )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 void C_HL2MP_Player::AddEntity( void )
 {
@@ -581,7 +581,7 @@ void C_HL2MP_Player::AddEntity( void )
 	vTempAngles[PITCH] = m_angEyeAngles[PITCH];
 
 	SetLocalAngles( vTempAngles );
-		
+
 	m_PlayerAnimState.Update();
 
 	// Zero out model pitch, blending takes care of all of it.
@@ -598,12 +598,12 @@ void C_HL2MP_Player::AddEntity( void )
 
 			Vector vecOrigin;
 			QAngle eyeAngles = m_angEyeAngles;
-	
+
 			GetAttachment( iAttachment, vecOrigin, eyeAngles );
 
 			Vector vForward;
 			AngleVectors( eyeAngles, &vForward );
-				
+
 			trace_t tr;
 			UTIL_TraceLine( vecOrigin, vecOrigin + (vForward * 200), MASK_SHOT, this, COLLISION_GROUP_NONE, &tr );
 
@@ -631,7 +631,7 @@ void C_HL2MP_Player::AddEntity( void )
 				beamInfo.m_bRenderable = true;
 				beamInfo.m_flLife = 0.5;
 				beamInfo.m_nFlags = FBEAM_FOREVER | FBEAM_ONLYNOISEONCE | FBEAM_NOTILE | FBEAM_HALOBEAM;
-				
+
 				m_pFlashlightBeam = beams->CreateBeamPoints( beamInfo );
 			}
 
@@ -648,7 +648,7 @@ void C_HL2MP_Player::AddEntity( void )
 
 				dlight_t *el = effects->CL_AllocDlight( 0 );
 				el->origin = tr.endpos;
-				el->radius = 50; 
+				el->radius = 50;
 				el->color.r = 200;
 				el->color.g = 200;
 				el->color.b = 200;
@@ -662,7 +662,7 @@ void C_HL2MP_Player::AddEntity( void )
 	}
 }
 
-ShadowType_t C_HL2MP_Player::ShadowCastType( void ) 
+ShadowType_t C_HL2MP_Player::ShadowCastType( void )
 {
 	if ( !IsVisible() )
 		 return SHADOWS_NONE;
@@ -694,7 +694,7 @@ bool C_HL2MP_Player::ShouldDraw( void )
 
 	if( IsLocalPlayer() && IsRagdoll() )
 		return true;
-	
+
 	if ( IsRagdoll() )
 		return false;
 
@@ -756,7 +756,7 @@ float C_HL2MP_Player::GetFOV( void )
 
 	// Clamp FOV in MP
 	int min_fov = GetMinFOV();
-	
+
 	// Don't let it go too low
 	flFOVOffset = MAX( min_fov, flFOVOffset );
 
@@ -911,7 +911,7 @@ void C_HL2MP_Player::ItemPreFrame( void )
 	BaseClass::ItemPreFrame();
 
 }
-	
+
 void C_HL2MP_Player::ItemPostFrame( void )
 {
 	if ( GetFlags() & FL_FROZEN )
@@ -931,7 +931,7 @@ void C_HL2MP_Player::CalcView( Vector &eyeOrigin, QAngle &eyeAngles, float &zNea
 {
 	if ( m_lifeState != LIFE_ALIVE && !IsObserver() )
 	{
-		Vector origin = EyePosition();			
+		Vector origin = EyePosition();
 
 		IRagdoll *pRagdoll = GetRepresentativeRagdoll();
 
@@ -944,8 +944,8 @@ void C_HL2MP_Player::CalcView( Vector &eyeOrigin, QAngle &eyeAngles, float &zNea
 		BaseClass::CalcView( eyeOrigin, eyeAngles, zNear, zFar, fov );
 
 		eyeOrigin = origin;
-		
-		Vector vForward; 
+
+		Vector vForward;
 		AngleVectors( eyeAngles, &vForward );
 
 		VectorNormalize( vForward );
@@ -963,7 +963,7 @@ void C_HL2MP_Player::CalcView( Vector &eyeOrigin, QAngle &eyeAngles, float &zNea
 		{
 			eyeOrigin = trace.endpos;
 		}
-		
+
 		return;
 	}
 
@@ -1017,10 +1017,10 @@ void C_HL2MPRagdoll::Interp_Copy( C_BaseAnimatingOverlay *pSourceEntity )
 {
 	if ( !pSourceEntity )
 		return;
-	
+
 	VarMapping_t *pSrc = pSourceEntity->GetVarMapping();
 	VarMapping_t *pDest = GetVarMapping();
-    	
+
 	// Find all the VarMapEntry_t's that represent the same variable.
 	for ( int i = 0; i < pDest->m_Entries.Count(); i++ )
 	{
@@ -1050,21 +1050,21 @@ void C_HL2MPRagdoll::ImpactTrace( trace_t *pTrace, int iDamageType, const char *
 	if ( iDamageType == DMG_BLAST )
 	{
 		dir *= 4000;  // adjust impact strenght
-				
+
 		// apply force at object mass center
 		pPhysicsObject->ApplyForceCenter( dir );
 	}
 	else
 	{
-		Vector hitpos;  
-	
+		Vector hitpos;
+
 		VectorMA( pTrace->startpos, pTrace->fraction, dir, hitpos );
 		VectorNormalize( dir );
 
 		dir *= 4000;  // adjust impact strenght
 
 		// apply force where we hit it
-		pPhysicsObject->ApplyForceOffset( dir, hitpos );	
+		pPhysicsObject->ApplyForceOffset( dir, hitpos );
 
 		// Blood spray!
 //		FX_CS_BloodSpray( hitpos, dir, 10 );
@@ -1079,7 +1079,7 @@ void C_HL2MPRagdoll::CreateHL2MPRagdoll( void )
 	// First, initialize all our data. If we have the player's entity on our client,
 	// then we can make ourselves start out exactly where the player is.
 	C_HL2MP_Player *pPlayer = dynamic_cast< C_HL2MP_Player* >( m_hPlayer.Get() );
-	
+
 	if ( pPlayer && !pPlayer->IsDormant() )
 	{
 		// move my current model instance to the ragdoll's so decals are preserved.
@@ -1089,7 +1089,7 @@ void C_HL2MPRagdoll::CreateHL2MPRagdoll( void )
 
 		// Copy all the interpolated vars from the player entity.
 		// The entity uses the interpolated history to get bone velocity.
-		bool bRemotePlayer = (pPlayer != C_BasePlayer::GetLocalPlayer());			
+		bool bRemotePlayer = (pPlayer != C_BasePlayer::GetLocalPlayer());
 		if ( bRemotePlayer )
 		{
 			Interp_Copy( pPlayer );
@@ -1106,7 +1106,7 @@ void C_HL2MPRagdoll::CreateHL2MPRagdoll( void )
 			// This is the local player, so set them in a default
 			// pose and slam their velocity, angles and origin
 			SetAbsOrigin( m_vecRagdollOrigin );
-			
+
 			SetAbsAngles( pPlayer->GetRenderAngles() );
 
 			SetAbsVelocity( m_vecRagdollVelocity );
@@ -1117,12 +1117,12 @@ void C_HL2MPRagdoll::CreateHL2MPRagdoll( void )
 				Assert( false );	// missing walk_lower?
 				iSeq = 0;
 			}
-			
+
 			SetSequence( iSeq );	// walk_lower, basic pose
 			SetCycle( 0.0 );
 
 			Interp_Reset( varMap );
-		}		
+		}
 	}
 	else
 	{
@@ -1134,7 +1134,7 @@ void C_HL2MPRagdoll::CreateHL2MPRagdoll( void )
 		SetAbsVelocity( m_vecRagdollVelocity );
 
 		Interp_Reset( GetVarMapping() );
-		
+
 	}
 
 	SetModelIndex( m_nModelIndex );
