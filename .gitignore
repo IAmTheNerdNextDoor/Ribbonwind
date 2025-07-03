@@ -1,6 +1,6 @@
 # Files to ignore when considering what GIT should commit.
 
-# Visual Studio 
+# Visual Studio
 *.suo
 *.user
 *.sln.docstates
@@ -502,3 +502,8 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+.ninja_*
+compile_commands*
+*.a
+mod_hl2mp_linux64
