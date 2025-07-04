@@ -2045,34 +2045,17 @@ void CGameMovement::HandleSlide()
         float wishspeed = wishvel.NormalizeInPlace();
         if (wishspeed > 0.0f)
         {
-            float accelerate = 7.0f;
+            float accelerate = 200.0f;
             Accelerate(wishvel, wishspeed, accelerate);
         }
 
-        if (speed2D > 0.1f && fabs(mv->m_flSideMove) > 0.1f)
+        float maxSlideSpeed = 500.0f;
+        float current2DSpeed = mv->m_vecVelocity.Length2D();
+        if (current2DSpeed > maxSlideSpeed)
         {
-            Vector vel2D = mv->m_vecVelocity;
-            vel2D.z = 0;
-            vel2D.NormalizeInPlace();
-
-            float turnSpeed = -5.0f; // steering sensitivity
-            float sideInput = mv->m_flSideMove / 450.0f;
-
-            float angle = sideInput * turnSpeed * gpGlobals->frametime;
-            float cosA = cos(angle);
-            float sinA = sin(angle);
-
-            Vector newDir(
-                vel2D.x * cosA - vel2D.y * sinA,
-                vel2D.x * sinA + vel2D.y * cosA,
-                0
-            );
-
-            float speedZ = mv->m_vecVelocity.z;
-            Vector newVel = newDir * speed2D;
-            newVel.z = speedZ;
-
-            mv->m_vecVelocity = newVel;
+            float scale = maxSlideSpeed / current2DSpeed;
+            mv->m_vecVelocity.x *= scale;
+            mv->m_vecVelocity.y *= scale;
         }
 
         if (speed2D < 100.0f || gpGlobals->curtime > m_flSlideEndTime || !isCrouching)
