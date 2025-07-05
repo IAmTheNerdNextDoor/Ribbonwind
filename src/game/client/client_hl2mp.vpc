@@ -151,6 +151,8 @@ $Project "Client (HL2MP)"
 				$File	"$SRCDIR\game\shared\hl2mp\weapon_slam.cpp"
 				$File	"$SRCDIR\game\shared\hl2mp\weapon_slam.h"
 				$File	"$SRCDIR\game\shared\hl2mp\weapon_stunstick.cpp"
+				$File   "$SRCDIR\game\shared\hl2mp\weapon_taucannon.cpp"
+				$File   "$SRCDIR\game\shared\hl2mp\weapon_taucannon.h"
 			}
 
 			$Folder	"UI"
