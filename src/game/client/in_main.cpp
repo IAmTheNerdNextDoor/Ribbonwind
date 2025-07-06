@@ -26,10 +26,6 @@
 #include <voice_status.h>
 #include "cam_thirdperson.h"
 
-#ifdef SIXENSE
-#include "sixense/in_sixense.h"
-#endif
-
 #include "client_virtualreality.h"
 #include "sourcevr/isourcevirtualreality.h"
 
@@ -122,7 +118,7 @@ kbutton_t	in_back;
 kbutton_t	in_moveleft;
 kbutton_t	in_moveright;
 // Display the netgraph
-kbutton_t	in_graph;  
+kbutton_t	in_graph;
 kbutton_t	in_joyspeed;		// auto-speed key from the joystick (only works for player movement, not vehicles)
 
 static	kbutton_t	in_klook;
@@ -289,11 +285,11 @@ Add a kbutton_t * to the list of pointers the engine can retrieve via KB_Find
 */
 void CInput::AddKeyButton( const char *name, kbutton_t *pkb )
 {
-	CKeyboardKey *p;	
+	CKeyboardKey *p;
 	kbutton_t *kb;
 
 	kb = FindKey( name );
-	
+
 	if ( kb )
 		return;
 
@@ -307,7 +303,7 @@ void CInput::AddKeyButton( const char *name, kbutton_t *pkb )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 CInput::CInput( void )
 {
@@ -319,7 +315,7 @@ CInput::CInput( void )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 CInput::~CInput( void )
 {
@@ -375,7 +371,7 @@ void KeyDown( kbutton_t *b, const char *c )
 
 	if (k == b->down[0] || k == b->down[1])
 		return;		// repeating key
-	
+
 	if (!b->down[0])
 		b->down[0] = k;
 	else if (!b->down[1])
@@ -388,7 +384,7 @@ void KeyDown( kbutton_t *b, const char *c )
 		}
 		return;
 	}
-	
+
 	if (b->state & 1)
 		return;		// still down
 	b->state |= 1 + 2;	// down + impulse down
@@ -400,7 +396,7 @@ KeyUp
 ============
 */
 void KeyUp( kbutton_t *b, const char *c )
-{	
+{
 	if ( !c || !c[0] )
 	{
 		b->down[0] = b->down[1] = 0;
@@ -434,8 +430,8 @@ void IN_CommanderMouseMoveDown( const CCommand &args ) {KeyDown(&in_commandermou
 void IN_CommanderMouseMoveUp( const CCommand &args ) {KeyUp(&in_commandermousemove, args[1] );}
 void IN_BreakDown( const CCommand &args ) { KeyDown( &in_break , args[1] );}
 void IN_BreakUp( const CCommand &args )
-{ 
-	KeyUp( &in_break, args[1] ); 
+{
+	KeyUp( &in_break, args[1] );
 #if defined( _DEBUG )
 	DebuggerBreak();
 #endif
@@ -496,15 +492,15 @@ void IN_XboxStub( const CCommand &args ) { /*do nothing*/ }
 void IN_Attack3Down( const CCommand &args ) { KeyDown(&in_attack3, args[1] );}
 void IN_Attack3Up( const CCommand &args ) { KeyUp(&in_attack3, args[1] );}
 
-void IN_DuckToggle( const CCommand &args ) 
-{ 
+void IN_DuckToggle( const CCommand &args )
+{
 	if ( ::input->KeyState(&in_ducktoggle) )
 	{
-		KeyUp( &in_ducktoggle, args[1] ); 
+		KeyUp( &in_ducktoggle, args[1] );
 	}
 	else
 	{
-		KeyDown( &in_ducktoggle, args[1] ); 
+		KeyDown( &in_ducktoggle, args[1] );
 	}
 }
 
@@ -588,11 +584,11 @@ float CInput::KeyState ( kbutton_t *key )
 {
 	float		val = 0.0;
 	int			impulsedown, impulseup, down;
-	
+
 	impulsedown = key->state & 2;
 	impulseup	= key->state & 4;
 	down		= key->state & 1;
-	
+
 	if ( impulsedown && !impulseup )
 	{
 		// pressed and held this frame?
@@ -616,17 +612,17 @@ float CInput::KeyState ( kbutton_t *key )
 		if ( down )
 		{
 			// released and re-pressed this frame
-			val = 0.75;	
+			val = 0.75;
 		}
 		else
 		{
 			// pressed and released this frame
-			val = 0.25;	
+			val = 0.25;
 		}
 	}
 
 	// clear impulses
-	key->state &= 1;		
+	key->state &= 1;
 	return val;
 }
 
@@ -650,11 +646,11 @@ float CInput::DetermineKeySpeed( float frametime )
 	{
 		if ( m_flKeyboardSampleTime <= 0 )
 			return 0.0f;
-	
+
 		frametime = MIN( m_flKeyboardSampleTime, frametime );
 		m_flKeyboardSampleTime -= frametime;
 	}
-	
+
 	float speed;
 
 	speed = frametime;
@@ -721,7 +717,7 @@ void CInput::AdjustPitch( float speed, QAngle& viewangles )
 
 		up		= KeyState ( &in_lookup );
 		down	= KeyState ( &in_lookdown );
-		
+
 		viewangles[PITCH] -= speed*cl_pitchspeed.GetFloat() * up;
 		viewangles[PITCH] += speed*cl_pitchspeed.GetFloat() * down;
 
@@ -729,7 +725,7 @@ void CInput::AdjustPitch( float speed, QAngle& viewangles )
 		{
 			view->StopPitchDrift ();
 		}
-	}	
+	}
 }
 
 /*
@@ -772,7 +768,7 @@ void CInput::AdjustAngles ( float frametime )
 {
 	float	speed;
 	QAngle viewangles;
-	
+
 	// Determine control scaling factor ( multiplies time )
 	speed = DetermineKeySpeed( frametime );
 	if ( speed <= 0.0f )
@@ -788,7 +784,7 @@ void CInput::AdjustAngles ( float frametime )
 
 	// Adjust PITCH if keyboard looking
 	AdjustPitch( speed, viewangles );
-	
+
 	// Make sure values are legitimate
 	ClampAngles( viewangles );
 
@@ -817,7 +813,7 @@ void CInput::ComputeSideMove( CUserCmd *cmd )
 		float ideal_yaw = cam_idealyaw.GetFloat();
 		float ideal_sin = sin(DEG2RAD(ideal_yaw));
 		float ideal_cos = cos(DEG2RAD(ideal_yaw));
-		
+
 		float movement = ideal_cos*KeyState(&in_moveright)
 			+  ideal_sin*KeyState(&in_back)
 			+ -ideal_cos*KeyState(&in_moveleft)
@@ -880,7 +876,7 @@ void CInput::ComputeForwardMove( CUserCmd *cmd )
 		float ideal_yaw = cam_idealyaw.GetFloat();
 		float ideal_sin = sin(DEG2RAD(ideal_yaw));
 		float ideal_cos = cos(DEG2RAD(ideal_yaw));
-		
+
 		float movement = ideal_cos*KeyState(&in_forward)
 			+  ideal_sin*KeyState(&in_moveright)
 			+ -ideal_cos*KeyState(&in_back)
@@ -892,10 +888,10 @@ void CInput::ComputeForwardMove( CUserCmd *cmd )
 	}
 
 	if ( !(in_klook.state & 1 ) )
-	{	
+	{
 		cmd->forwardmove += cl_forwardspeed.GetFloat() * KeyState (&in_forward);
 		cmd->forwardmove -= cl_backspeed.GetFloat() * KeyState (&in_back);
-	}	
+	}
 }
 
 /*
@@ -924,7 +920,7 @@ void CInput::ScaleMovements( CUserCmd *cmd )
 	{
 		float fratio = spd / fmov;
 
-		if ( !IsNoClipping() ) 
+		if ( !IsNoClipping() )
 		{
 			cmd->forwardmove	*= fratio;
 			cmd->sidemove		*= fratio;
@@ -983,8 +979,8 @@ void CInput::ControllerMove( float frametime, CUserCmd *cmd )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : *weapon - 
+// Purpose:
+// Input  : *weapon -
 //-----------------------------------------------------------------------------
 void CInput::MakeWeaponSelection( C_BaseCombatWeapon *weapon )
 {
@@ -1033,33 +1029,13 @@ void CInput::ExtraMouseSample( float frametime, bool active )
 
 		// Allow mice and other controllers to add their inputs
 		ControllerMove( frametime, cmd );
-#ifdef SIXENSE
-		g_pSixenseInput->SixenseFrame( frametime, cmd ); 
-
-		if( g_pSixenseInput->IsEnabled() )
-		{
-			g_pSixenseInput->SetView( frametime, cmd );
-		}
-#endif
 	}
 
 	// Retreive view angles from engine ( could have been set in IN_AdjustAngles above )
 	engine->GetViewAngles( viewangles );
 
 	// Set button and flag bits, don't blow away state
-#ifdef SIXENSE
-	if( g_pSixenseInput->IsEnabled() )
-	{
-		// Some buttons were set in SixenseUpdateKeys, so or in any real keypresses
-		cmd->buttons |= GetButtonBits( 0 );
-	}
-	else
-	{
-		cmd->buttons = GetButtonBits( 0 );
-	}
-#else
 	cmd->buttons = GetButtonBits( 0 );
-#endif
 
 	// Use new view angles if alive, otherwise user last angles we stored off.
 	if ( g_iAlive )
@@ -1081,7 +1057,7 @@ void CInput::ExtraMouseSample( float frametime, bool active )
 	}
 
 	// Let the headtracker override the view at the very end of the process so
-	// that vehicles and other stuff in g_pClientMode->CreateMove can override 
+	// that vehicles and other stuff in g_pClientMode->CreateMove can override
 	// first
 	if ( active && UseVR() )
 	{
@@ -1091,7 +1067,7 @@ void CInput::ExtraMouseSample( float frametime, bool active )
 			QAngle curViewangles, newViewangles;
 			Vector curMotion, newMotion;
 			engine->GetViewAngles( curViewangles );
-			curMotion.Init ( 
+			curMotion.Init (
 				cmd->forwardmove,
 				cmd->sidemove,
 				cmd->upmove );
@@ -1109,7 +1085,7 @@ void CInput::ExtraMouseSample( float frametime, bool active )
 }
 
 void CInput::CreateMove ( int sequence_number, float input_sample_frametime, bool active )
-{	
+{
 	CUserCmd *cmd = &m_pCommands[ sequence_number % MULTIPLAYER_BACKUP ];
 	CVerifiedUserCmd *pVerified = &m_pVerifiedCommands[ sequence_number % MULTIPLAYER_BACKUP ];
 
@@ -1142,14 +1118,6 @@ void CInput::CreateMove ( int sequence_number, float input_sample_frametime, boo
 
 		// Allow mice and other controllers to add their inputs
 		ControllerMove( input_sample_frametime, cmd );
-#ifdef SIXENSE
-		g_pSixenseInput->SixenseFrame( input_sample_frametime, cmd ); 
-
-		if( g_pSixenseInput->IsEnabled() )
-		{
-			g_pSixenseInput->SetView( input_sample_frametime, cmd );
-		}
-#endif
 	}
 	else
 	{
@@ -1181,27 +1149,11 @@ void CInput::CreateMove ( int sequence_number, float input_sample_frametime, boo
 	}
 
 	// Set button and flag bits
-#ifdef SIXENSE
-	if( g_pSixenseInput->IsEnabled() )
-	{
-		// Some buttons were set in SixenseUpdateKeys, so or in any real keypresses
-		cmd->buttons |= GetButtonBits( 1 );
-	}
-	else
-	{
-		cmd->buttons = GetButtonBits( 1 );
-	}
-#else
-	// Set button and flag bits
 	cmd->buttons = GetButtonBits( 1 );
-#endif
 
 	// Using joystick?
-#ifdef SIXENSE
-	if ( in_joystick.GetInt() || g_pSixenseInput->IsEnabled() )
-#else
 	if ( in_joystick.GetInt() )
-#endif
+
 	{
 		if ( cmd->forwardmove > 0 )
 		{
@@ -1228,16 +1180,7 @@ void CInput::CreateMove ( int sequence_number, float input_sample_frametime, boo
 	if ( g_pClientMode->CreateMove( input_sample_frametime, cmd ) )
 	{
 		// Get current view angles after the client mode tweaks with it
-#ifdef SIXENSE
-		// Only set the engine angles if sixense is not enabled. It is done in SixenseInput::SetView otherwise.
-		if( !g_pSixenseInput->IsEnabled() )
-		{
-			engine->SetViewAngles( cmd->viewangles );
-		}
-#else
 		engine->SetViewAngles( cmd->viewangles );
-
-#endif
 
 		if ( UseVR() )
 		{
@@ -1247,7 +1190,7 @@ void CInput::CreateMove ( int sequence_number, float input_sample_frametime, boo
 				QAngle curViewangles, newViewangles;
 				Vector curMotion, newMotion;
 				engine->GetViewAngles( curViewangles );
-				curMotion.Init ( 
+				curMotion.Init (
 					cmd->forwardmove,
 					cmd->sidemove,
 					cmd->upmove );
@@ -1291,10 +1234,10 @@ void CInput::CreateMove ( int sequence_number, float input_sample_frametime, boo
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : buf - 
-//			buffersize - 
-//			slot - 
+// Purpose:
+// Input  : buf -
+//			buffersize -
+//			slot -
 //-----------------------------------------------------------------------------
 void CInput::EncodeUserCmdToBuffer( bf_write& buf, int sequence_number )
 {
@@ -1305,10 +1248,10 @@ void CInput::EncodeUserCmdToBuffer( bf_write& buf, int sequence_number )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : buf - 
-//			buffersize - 
-//			slot - 
+// Purpose:
+// Input  : buf -
+//			buffersize -
+//			slot -
 //-----------------------------------------------------------------------------
 void CInput::DecodeUserCmdFromBuffer( bf_read& buf, int sequence_number )
 {
@@ -1329,10 +1272,10 @@ void CInput::ValidateUserCmd( CUserCmd *usercmd, int sequence_number )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : *buf - 
-//			from - 
-//			to - 
+// Purpose:
+// Input  : *buf -
+//			from -
+//			to -
 //-----------------------------------------------------------------------------
 bool CInput::WriteUsercmdDeltaToBuffer( bf_write *buf, int from, int to, bool isnewcommand )
 {
@@ -1392,8 +1335,8 @@ bool CInput::WriteUsercmdDeltaToBuffer( bf_write *buf, int from, int to, bool is
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : slot - 
+// Purpose:
+// Input  : slot -
 // Output : CUserCmd
 //-----------------------------------------------------------------------------
 CUserCmd *CInput::GetUserCmd( int sequence_number )
@@ -1411,12 +1354,12 @@ CUserCmd *CInput::GetUserCmd( int sequence_number )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : bits - 
-//			in_button - 
-//			in_ignore - 
-//			*button - 
-//			reset - 
+// Purpose:
+// Input  : bits -
+//			in_button -
+//			in_ignore -
+//			*button -
+//			reset -
 // Output : static void
 //-----------------------------------------------------------------------------
 static void CalcButtonBits( int& bits, int in_button, int in_ignore, kbutton_t *button, bool reset )
@@ -1530,7 +1473,7 @@ float CInput::GetLookSpring( void )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 // Output : float
 //-----------------------------------------------------------------------------
 float CInput::GetLastForwardMove( void )
@@ -1677,7 +1620,7 @@ void CInput::Init_All (void)
 		Init_Mouse ();
 		Init_Keyboard();
 	}
-		
+
 	// Initialize third person camera controls.
 	Init_Camera();
 
@@ -1709,4 +1652,3 @@ void CInput::LevelInit( void )
 	m_EntityGroundContact.RemoveAll();
 #endif
 }
-

@@ -1,6 +1,6 @@
 //========= Copyright Valve Corporation, All rights reserved. ============//
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //
@@ -16,12 +16,6 @@
 #include "vgui/ISurface.h"
 #include "../hud_crosshair.h"
 #include "VGuiMatSurface/IMatSystemSurface.h"
-
-#ifdef SIXENSE
-#include "sixense/in_sixense.h"
-#include "view.h"
-int ScreenTransform( const Vector& point, Vector& screen );
-#endif
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -40,7 +34,7 @@ extern ConVar crosshair;
 
 /*
 ==================================================
-CHUDQuickInfo 
+CHUDQuickInfo
 ==================================================
 */
 
@@ -56,10 +50,10 @@ public:
 	bool ShouldDraw( void );
 	virtual void OnThink();
 	virtual void Paint();
-	
+
 	virtual void ApplySchemeSettings( IScheme *scheme );
 private:
-	
+
 	void	DrawWarning( int x, int y, CHudTexture *icon, float &time );
 	void	UpdateEventTime( void );
 	bool	EventTimeElapsed( void );
@@ -74,7 +68,7 @@ private:
 	bool	m_warnHealth;
 
 	bool	m_bFadedOut;
-	
+
 	bool	m_bDimmed;			// Whether or not we are dimmed down
 	float	m_flLastEventTime;	// Last active event (controls dimmed state)
 
@@ -160,7 +154,7 @@ void CHUDQuickInfo::DrawWarning( int x, int y, CHudTexture *icon, float &time )
 			time += (gpGlobals->frametime * 200.0f);
 		}
 	}
-	
+
 	// Update our time
 	time -= (gpGlobals->frametime * 200.0f);
 	Color caution = gHUD.m_clrCaution;
@@ -171,7 +165,7 @@ void CHUDQuickInfo::DrawWarning( int x, int y, CHudTexture *icon, float &time )
 
 //-----------------------------------------------------------------------------
 // Purpose: Save CPU cycles by letting the HUD system early cull
-// costly traversal.  Called per frame, return true if thinking and 
+// costly traversal.  Called per frame, return true if thinking and
 // painting need to occur.
 //-----------------------------------------------------------------------------
 bool CHUDQuickInfo::ShouldDraw( void )
@@ -261,7 +255,7 @@ void CHUDQuickInfo::Paint()
 	int		yCenter = (int)fY - m_icon_lb->Height() / 2;
 
 	float	scalar  = 138.0f/255.0f;
-	
+
 	// Check our health for a warning
 	int	health	= player->GetHealth();
 	if ( health != m_lastHealth )
@@ -275,7 +269,7 @@ void CHUDQuickInfo::Paint()
 			{
 				m_healthFade = 255;
 				m_warnHealth = true;
-				
+
 				CLocalPlayerFilter filter;
 				C_BaseEntity::EmitSound( filter, SOUND_FROM_LOCAL_PLAYER, "HUDQuickInfo.LowHealth" );
 			}
@@ -341,7 +335,7 @@ void CHUDQuickInfo::Paint()
 		healthPerc = clamp( healthPerc, 0.0f, 1.0f );
 
 		Color healthColor = m_warnHealth ? gHUD.m_clrCaution : gHUD.m_clrNormal;
-		
+
 		if ( m_warnHealth )
 		{
 			healthColor[3] = 255 * sinScale;
@@ -350,7 +344,7 @@ void CHUDQuickInfo::Paint()
 		{
 			healthColor[3] = 255 * scalar;
 		}
-		
+
 		gHUD.DrawIconProgressBar( xCenter - (m_icon_lb->Width() * 2), yCenter, m_icon_lb, m_icon_lbe, ( 1.0f - healthPerc ), healthColor, CHud::HUDPB_VERTICAL );
 	}
 
@@ -374,7 +368,7 @@ void CHUDQuickInfo::Paint()
 		}
 
 		Color ammoColor = m_warnAmmo ? gHUD.m_clrCaution : gHUD.m_clrNormal;
-		
+
 		if ( m_warnAmmo )
 		{
 			ammoColor[3] = 255 * sinScale;
@@ -383,13 +377,13 @@ void CHUDQuickInfo::Paint()
 		{
 			ammoColor[3] = 255 * scalar;
 		}
-		
+
 		gHUD.DrawIconProgressBar( xCenter + m_icon_rb->Width(), yCenter, m_icon_rb, m_icon_rbe, ammoPerc, ammoColor, CHud::HUDPB_VERTICAL );
 	}
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 void CHUDQuickInfo::UpdateEventTime( void )
 {
@@ -397,7 +391,7 @@ void CHUDQuickInfo::UpdateEventTime( void )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
 bool CHUDQuickInfo::EventTimeElapsed( void )
@@ -407,4 +401,3 @@ bool CHUDQuickInfo::EventTimeElapsed( void )
 
 	return false;
 }
-

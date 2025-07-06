@@ -61,9 +61,9 @@ $Configuration
 
 	$Compiler
 	{
-		$AdditionalIncludeDirectories	"$BASE;.\;$SRCDIR\game\shared;$SRCDIR\utils\common;$SRCDIR\game\shared\econ;$SRCDIR\game\server\NextBot"
+		$AdditionalIncludeDirectories	"$BASE;.\;$SRCDIR\game\shared;$SRCDIR\utils\common;$SRCDIR\game\server\NextBot"
 		$PreprocessorDefinitions		"$BASE;GAME_DLL;VECTOR;VERSION_SAFE_STEAM_API_INTERFACES;PROTECTED_THINGS_ENABLE;sprintf=use_Q_snprintf_instead_of_sprintf;strncpy=use_Q_strncpy_instead;_snprintf=use_Q_snprintf_instead"
-		$PreprocessorDefinitions		"$BASE;INCLUDED_STEAM2_USERID_STRUCTS" 
+		$PreprocessorDefinitions		"$BASE;INCLUDED_STEAM2_USERID_STRUCTS"
 		$PreprocessorDefinitions		"$BASE;SWDS" [$POSIX]
 		$PreprocessorDefinitions		"$BASE;fopen=dont_use_fopen" [$WINDOWS||$X360]
 		$Create/UsePrecompiledHeader	"Use Precompiled Header (/Yu)"
@@ -1023,7 +1023,6 @@ $Project
 		$File	"$SRCDIR\public\worldsize.h"
 		$File	"$SRCDIR\public\zip_uncompressed.h"
 		$File	"$SRCDIR\game\shared\mp_shareddefs.h"
-		$File	"$SRCDIR\game\shared\econ\ihasowner.h"
 		//Haptics
 		$File	"$SRCDIR\public\haptics\haptic_utils.h"	[$WINDOWS]
 	}
@@ -1034,8 +1033,8 @@ $Project
 		$File	"toolframework_server.cpp"
 		$File	"toolframework_server.h"
 	}
-	
-	$Folder	"Link Libraries" 
+
+	$Folder	"Link Libraries"
 	{
 		$Lib	choreoobjects
 		$Lib	dmxloader

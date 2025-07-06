@@ -1,3 +1,4 @@
+
 //========= Copyright Valve Corporation, All rights reserved. ============//
 //
 // Purpose: Implements shared baseplayer class functionality
@@ -34,7 +35,7 @@
 	#include "env_zoom.h"
 
 	extern int TrainSpeed(int iSpeed, int iMax);
-	
+
 #endif
 
 #if defined( CSTRIKE_DLL )
@@ -47,9 +48,6 @@
 #include "SoundEmitterSystem/isoundemittersystembase.h"
 #include "decals.h"
 #include "obstacle_pushaway.h"
-#ifdef SIXENSE
-#include "sixense/in_sixense.h"
-#endif
 
 // NVNT haptic utils
 #include "haptics/haptic_utils.h"
@@ -93,10 +91,10 @@ ConVar mp_usehwmmodels( "mp_usehwmmodels", "0", NULL, "Enable the use of the hw 
 
 bool UseHWMorphModels()
 {
-// #ifdef CLIENT_DLL 
+// #ifdef CLIENT_DLL
 // 	if ( mp_usehwmmodels.GetInt() == 0 )
 // 		return g_pMaterialSystemHardwareConfig->HasFastVertexTextures();
-// 
+//
 // 	return mp_usehwmmodels.GetInt() > 0;
 // #else
 // 	return false;
@@ -137,7 +135,7 @@ void CopySoundNameWithModifierToken( char *pchDest, const char *pchSource, int n
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 // Output : float
 //-----------------------------------------------------------------------------
 float CBasePlayer::GetTimeBase( void ) const
@@ -195,7 +193,7 @@ void CBasePlayer::ItemPreFrame()
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
 bool CBasePlayer::UsingStandardWeaponsInVehicle( void )
@@ -215,7 +213,7 @@ bool CBasePlayer::UsingStandardWeaponsInVehicle( void )
 	int nRole = pVehicle->GetPassengerRole( this );
 	bool bUsingStandardWeapons = pVehicle->IsPassengerUsingStandardWeapons( nRole );
 
-	// Fall through and check weapons, etc. if we're using them 
+	// Fall through and check weapons, etc. if we're using them
 	if (!bUsingStandardWeapons )
 		return false;
 
@@ -357,15 +355,15 @@ Vector CBasePlayer::EyePosition( )
 
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : 
+// Purpose:
+// Input  :
 // Output : const Vector
 //-----------------------------------------------------------------------------
 const Vector CBasePlayer::GetPlayerMins( void ) const
 {
 	if ( IsObserver() )
 	{
-		return VEC_OBS_HULL_MIN_SCALED( this );	
+		return VEC_OBS_HULL_MIN_SCALED( this );
 	}
 	else
 	{
@@ -381,15 +379,15 @@ const Vector CBasePlayer::GetPlayerMins( void ) const
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : 
+// Purpose:
+// Input  :
 // Output : const Vector
 //-----------------------------------------------------------------------------
 const Vector CBasePlayer::GetPlayerMaxs( void ) const
-{	
+{
 	if ( IsObserver() )
 	{
-		return VEC_OBS_HULL_MAX_SCALED( this );	
+		return VEC_OBS_HULL_MAX_SCALED( this );
 	}
 	else
 	{
@@ -420,7 +418,7 @@ void CBasePlayer::CacheVehicleView( void )
 #endif
 
 	if ( pVehicle != NULL )
-	{		
+	{
 		int nRole = pVehicle->GetPassengerRole( this );
 
 		// Get our view for this frame
@@ -474,7 +472,7 @@ void CBasePlayer::EyePositionAndVectors( Vector *pPosition, Vector *pForward,
 	{
 		CacheVehicleView();
 		AngleVectors( m_vecVehicleViewAngles, pForward, pRight, pUp );
-		
+
 		if ( pPosition != NULL )
 		{
 			*pPosition = m_vecVehicleViewOrigin;
@@ -563,7 +561,7 @@ void CBasePlayer::UpdateStepSound( surfacedata_t *psurface, const Vector &vecOri
 
 //	MoveHelper()->PlayerSetAnimation( PLAYER_WALK );
 
-	bWalking = speed < velrun;		
+	bWalking = speed < velrun;
 
 	VectorCopy( vecOrigin, knee );
 	VectorCopy( vecOrigin, feet );
@@ -619,11 +617,11 @@ void CBasePlayer::UpdateStepSound( surfacedata_t *psurface, const Vector &vecOri
 		switch ( psurface->game.material )
 		{
 		default:
-		case CHAR_TEX_CONCRETE:						
+		case CHAR_TEX_CONCRETE:
 			fvol = bWalking ? 0.2 : 0.5;
 			break;
 
-		case CHAR_TEX_METAL:	
+		case CHAR_TEX_METAL:
 			fvol = bWalking ? 0.2 : 0.5;
 			break;
 
@@ -631,7 +629,7 @@ void CBasePlayer::UpdateStepSound( surfacedata_t *psurface, const Vector &vecOri
 			fvol = bWalking ? 0.25 : 0.55;
 			break;
 
-		case CHAR_TEX_VENT:	
+		case CHAR_TEX_VENT:
 			fvol = bWalking ? 0.4 : 0.7;
 			break;
 
@@ -639,7 +637,7 @@ void CBasePlayer::UpdateStepSound( surfacedata_t *psurface, const Vector &vecOri
 			fvol = bWalking ? 0.2 : 0.5;
 			break;
 
-		case CHAR_TEX_TILE:	
+		case CHAR_TEX_TILE:
 			fvol = bWalking ? 0.2 : 0.5;
 			break;
 
@@ -648,7 +646,7 @@ void CBasePlayer::UpdateStepSound( surfacedata_t *psurface, const Vector &vecOri
 			break;
 		}
 	}
-	
+
 	// play the sound
 	// 65% volume if ducking
 	if ( GetFlags() & FL_DUCKING )
@@ -660,9 +658,9 @@ void CBasePlayer::UpdateStepSound( surfacedata_t *psurface, const Vector &vecOri
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : step - 
-//			fvol - 
+// Purpose:
+// Input  : step -
+//			fvol -
 //			force - force sound to play
 //-----------------------------------------------------------------------------
 void CBasePlayer::PlayStepSound( Vector &vecOrigin, surfacedata_t *psurface, float fvol, bool force )
@@ -757,7 +755,7 @@ void CBasePlayer::UpdateButtonState( int nUserCmdButtonMask )
 	// Get button states
 	m_nButtons = nUserCmdButtonMask;
  	int buttonsChanged = m_afButtonLast ^ m_nButtons;
-	
+
 	// Debounced button codes for pressed/released
 	// UNDONE: Do we need auto-repeat?
 	m_afButtonPressed =  buttonsChanged & m_nButtons;		// The changed ones still down are "pressed"
@@ -765,15 +763,15 @@ void CBasePlayer::UpdateButtonState( int nUserCmdButtonMask )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 void CBasePlayer::GetStepSoundVelocities( float *velwalk, float *velrun )
 {
-	// UNDONE: need defined numbers for run, walk, crouch, crouch run velocities!!!!	
+	// UNDONE: need defined numbers for run, walk, crouch, crouch run velocities!!!!
 	if ( ( GetFlags() & FL_DUCKING) || ( GetMoveType() == MOVETYPE_LADDER ) )
 	{
 		*velwalk = 60;		// These constants should be based on cl_movespeedkey * cl_forwardspeed somehow
-		*velrun = 80;		
+		*velrun = 80;
 	}
 	else
 	{
@@ -783,7 +781,7 @@ void CBasePlayer::GetStepSoundVelocities( float *velwalk, float *velrun )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 void CBasePlayer::SetStepSoundTime( stepsoundtimes_t iStepSoundTime, bool bWalking )
 {
@@ -807,7 +805,7 @@ void CBasePlayer::SetStepSoundTime( stepsoundtimes_t iStepSoundTime, bool bWalki
 		break;
 	}
 
-	// UNDONE: need defined numbers for run, walk, crouch, crouch run velocities!!!!	
+	// UNDONE: need defined numbers for run, walk, crouch, crouch run velocities!!!!
 	if ( ( GetFlags() & FL_DUCKING) || ( GetMoveType() == MOVETYPE_LADDER ) )
 	{
 		m_flStepSoundTime += 100;
@@ -838,7 +836,7 @@ void CBasePlayer::Weapon_SetLast( CBaseCombatWeapon *pWeapon )
 // Input  :
 // Output :
 //-----------------------------------------------------------------------------
-bool CBasePlayer::Weapon_Switch( CBaseCombatWeapon *pWeapon, int viewmodelindex /*=0*/ ) 
+bool CBasePlayer::Weapon_Switch( CBaseCombatWeapon *pWeapon, int viewmodelindex /*=0*/ )
 {
 	CBaseCombatWeapon *pLastWeapon = GetActiveWeapon();
 
@@ -899,7 +897,7 @@ void CBasePlayer::AddToPlayerSimulationList( CBaseEntity *other )
 //-----------------------------------------------------------------------------
 // Purpose: Fixme, this should occur if the player fails to drive simulation
 //  often enough!!!
-// Input  : *other - 
+// Input  : *other -
 //-----------------------------------------------------------------------------
 void CBasePlayer::RemoveFromPlayerSimulationList( CBaseEntity *other )
 {
@@ -924,7 +922,7 @@ void CBasePlayer::SimulatePlayerSimulatedEntities( void )
 	for ( i = c - 1; i >= 0; i-- )
 	{
 		CHandle< CBaseEntity > h;
-		
+
 		h = m_SimulatedByThisPlayer[ i ];
 		CBaseEntity *e = h;
 
@@ -952,7 +950,7 @@ void CBasePlayer::SimulatePlayerSimulatedEntities( void )
 	for ( i = c - 1; i >= 0; i-- )
 	{
 		CHandle< CBaseEntity > h;
-		
+
 		h = m_SimulatedByThisPlayer[ i ];
 
 		CBaseEntity *e = h;
@@ -980,7 +978,7 @@ void CBasePlayer::SimulatePlayerSimulatedEntities( void )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 void CBasePlayer::ClearPlayerSimulationList( void )
 {
@@ -990,7 +988,7 @@ void CBasePlayer::ClearPlayerSimulationList( void )
 	for ( i = c - 1; i >= 0; i-- )
 	{
 		CHandle< CBaseEntity > h;
-		
+
 		h = m_SimulatedByThisPlayer[ i ];
 		CBaseEntity *e = h;
 		if ( e )
@@ -1012,7 +1010,7 @@ bool CBasePlayer::Weapon_ShouldSelectItem( CBaseCombatWeapon *pWeapon )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 void CBasePlayer::SelectItem( const char *pstr, int iSubType )
 {
@@ -1044,7 +1042,7 @@ void CBasePlayer::SelectItem( const char *pstr, int iSubType )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 ConVar sv_debug_player_use( "sv_debug_player_use", "0", FCVAR_REPLICATED, "Visualizes +use logic. Green cross=trace success, Red cross=trace too far, Green box=radius success" );
 float IntervalDistance( float x, float x0, float x1 )
@@ -1152,7 +1150,7 @@ CBaseEntity *CBasePlayer::FindUseEntity()
 				}
 
 				pNearest = pObject;
-				
+
 				// if this is directly under the cursor just return it now
 				if ( i == 0 )
 					return pObject;
@@ -1285,7 +1283,7 @@ void CBasePlayer::PlayerUse ( void )
 			ObserverUse( true );
 		else if ( m_afButtonReleased & IN_USE )
 			ObserverUse( false );
-		
+
 		return;
 	}
 
@@ -1364,7 +1362,7 @@ void CBasePlayer::PlayerUse ( void )
 	if ( pUseEntity )
 	{
 
-		//!!!UNDONE: traceline here to prevent +USEing buttons through walls			
+		//!!!UNDONE: traceline here to prevent +USEing buttons through walls
 
 		int caps = pUseEntity->ObjectCaps();
 		variant_t emptyVariant;
@@ -1400,7 +1398,7 @@ void CBasePlayer::PlayerUse ( void )
 ConVar	sv_suppress_viewpunch( "sv_suppress_viewpunch", "0", FCVAR_REPLICATED | FCVAR_CHEAT | FCVAR_DEVELOPMENTONLY );
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 void CBasePlayer::ViewPunch( const QAngle &angleOffset )
 {
@@ -1416,7 +1414,7 @@ void CBasePlayer::ViewPunch( const QAngle &angleOffset )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 void CBasePlayer::ViewPunchReset( float tolerance )
 {
@@ -1523,17 +1521,17 @@ void CBasePlayer::ResetObserverMode()
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : eyeOrigin - 
-//			eyeAngles - 
-//			zNear - 
-//			zFar - 
-//			fov - 
+// Purpose:
+// Input  : eyeOrigin -
+//			eyeAngles -
+//			zNear -
+//			zFar -
+//			fov -
 //-----------------------------------------------------------------------------
 void CBasePlayer::CalcView( Vector &eyeOrigin, QAngle &eyeAngles, float &zNear, float &zFar, float &fov )
 {
 #if defined( CLIENT_DLL )
-	IClientVehicle *pVehicle; 
+	IClientVehicle *pVehicle;
 #else
 	IServerVehicle *pVehicle;
 #endif
@@ -1574,7 +1572,7 @@ void CBasePlayer::CalcViewModelView( const Vector& eyeOrigin, const QAngle& eyeA
 		CBaseViewModel *vm = GetViewModel( i );
 		if ( !vm )
 			continue;
-	
+
 		vm->CalcViewModelView( this, eyeOrigin, eyeAngles );
 	}
 }
@@ -1590,18 +1588,7 @@ void CBasePlayer::CalcPlayerView( Vector& eyeOrigin, QAngle& eyeAngles, float& f
 #endif
 
 	VectorCopy( EyePosition(), eyeOrigin );
-#ifdef SIXENSE
-	if ( g_pSixenseInput->IsEnabled() )
-	{
-		VectorCopy( EyeAngles() + GetEyeAngleOffset(), eyeAngles );
-	}
-	else
-	{
-		VectorCopy( EyeAngles(), eyeAngles );
-	}
-#else
 	VectorCopy( EyeAngles(), eyeAngles );
-#endif
 
 #if defined( CLIENT_DLL )
 	if ( !prediction->InPrediction() )
@@ -1642,9 +1629,9 @@ void CBasePlayer::CalcPlayerView( Vector& eyeOrigin, QAngle& eyeAngles, float& f
 //-----------------------------------------------------------------------------
 // Purpose: The main view setup function for vehicles
 //-----------------------------------------------------------------------------
-void CBasePlayer::CalcVehicleView( 
+void CBasePlayer::CalcVehicleView(
 #if defined( CLIENT_DLL )
-	IClientVehicle *pVehicle, 
+	IClientVehicle *pVehicle,
 #else
 	IServerVehicle *pVehicle,
 #endif
@@ -1718,10 +1705,10 @@ void CBasePlayer::CalcObserverView( Vector& eyeOrigin, QAngle& eyeAngles, float&
 
 //-----------------------------------------------------------------------------
 // Purpose: Compute roll angle for a particular lateral velocity
-// Input  : angles - 
-//			velocity - 
-//			rollangle - 
-//			rollspeed - 
+// Input  : angles -
+//			velocity -
+//			rollangle -
+//			rollspeed -
 // Output : float CViewRender::CalcRoll
 //-----------------------------------------------------------------------------
 float CBasePlayer::CalcRoll (const QAngle& angles, const Vector& velocity, float rollangle, float rollspeed)
@@ -1729,17 +1716,17 @@ float CBasePlayer::CalcRoll (const QAngle& angles, const Vector& velocity, float
     float   sign;
     float   side;
     float   value;
-	
+
 	Vector  forward, right, up;
-	
+
     AngleVectors (angles, &forward, &right, &up);
-	
+
 	// Get amount of lateral movement
     side = DotProduct( velocity, right );
 	// Right or left side?
     sign = side < 0 ? -1 : 1;
     side = fabs(side);
-    
+
 	value = rollangle;
 	// Hit 100% of rollangle at rollspeed.  Below that get linear approx.
     if ( side < rollspeed )
@@ -1799,10 +1786,10 @@ float CBasePlayer::GetFOVDistanceAdjustFactor()
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : &vecTracerSrc - 
-//			&tr - 
-//			iTracerType - 
+// Purpose:
+// Input  : &vecTracerSrc -
+//			&tr -
+//			iTracerType -
 //-----------------------------------------------------------------------------
 void CBasePlayer::MakeTracer( const Vector &vecTracerSrc, const trace_t &tr, int iTracerType )
 {
@@ -1839,7 +1826,7 @@ void CBasePlayer::SharedSpawn()
 	MDLCACHE_CRITICAL_SECTION();
 	SetSequence( SelectWeightedSequence( ACT_IDLE ) );
 
-	if ( GetFlags() & FL_DUCKING ) 
+	if ( GetFlags() & FL_DUCKING )
 		SetCollisionBounds( VEC_DUCK_HULL_MIN, VEC_DUCK_HULL_MAX );
 	else
 		SetCollisionBounds( VEC_HULL_MIN, VEC_HULL_MAX );
@@ -1857,7 +1844,7 @@ void CBasePlayer::SharedSpawn()
 
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 bool CBasePlayer::IsLerpingFOV( void ) const
 {
@@ -1871,7 +1858,7 @@ bool CBasePlayer::IsLerpingFOV( void ) const
 
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 // Output : int
 //-----------------------------------------------------------------------------
 int CBasePlayer::GetDefaultFOV( void ) const
@@ -1917,7 +1904,7 @@ void CBasePlayer::AvoidPhysicsProps( CUserCmd *pCmd )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 // Output : const char
 //-----------------------------------------------------------------------------
 const char *CBasePlayer::GetTracerType( void )
@@ -1931,7 +1918,7 @@ const char *CBasePlayer::GetTracerType( void )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 void CBasePlayer::ClearZoomOwner( void )
 {
@@ -1991,7 +1978,7 @@ bool CBasePlayer::SetFOV( CBaseEntity *pRequester, int FOV, float zoomRate, int 
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 void CBasePlayer::UpdateUnderwaterState( void )
 {
@@ -2044,7 +2031,7 @@ void CBasePlayer::SetPlayerUnderwater( bool state )
 {
 	if ( m_bPlayerUnderwater != state )
 	{
-#if defined( WIN32 ) && !defined( _X360 ) 
+#if defined( WIN32 ) && !defined( _X360 )
 		// NVNT turn on haptic drag when underwater
 		if(state)
 			HapticSetDrag(this,1);
@@ -2057,7 +2044,7 @@ void CBasePlayer::SetPlayerUnderwater( bool state )
 		if ( state )
 			EmitSound( "Player.AmbientUnderWater" );
 		else
-			StopSound( "Player.AmbientUnderWater" );		
+			StopSound( "Player.AmbientUnderWater" );
 #endif
 	}
 }
@@ -2078,7 +2065,7 @@ bool fogparams_t::operator !=( const fogparams_t& other ) const
 	if ( this->enable != other.enable ||
 		this->blend != other.blend ||
 		this->radial != other.radial ||
-		!VectorsAreEqual(this->dirPrimary, other.dirPrimary, 0.01f ) || 
+		!VectorsAreEqual(this->dirPrimary, other.dirPrimary, 0.01f ) ||
 		this->colorPrimary.Get() != other.colorPrimary.Get() ||
 		this->colorSecondary.Get() != other.colorSecondary.Get() ||
 		this->start != other.start ||
@@ -2095,4 +2082,3 @@ bool fogparams_t::operator !=( const fogparams_t& other ) const
 
 	return false;
 }
-

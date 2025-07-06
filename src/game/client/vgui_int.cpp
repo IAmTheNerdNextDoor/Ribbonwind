@@ -1,6 +1,6 @@
 //========= Copyright Valve Corporation, All rights reserved. ============//
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================//
@@ -23,10 +23,6 @@
 #include <KeyValues.h>
 #include "filesystem.h"
 #include "matsys_controls/matsyscontrols.h"
-
-#ifdef SIXENSE
-#include "sixense/in_sixense.h"
-#endif
 
 #if defined( TF_CLIENT_DLL )
 #include "tf_gamerules.h"
@@ -76,11 +72,11 @@ public:
 			kv->SetString( entry->name(), "" );
 		}
 	}
-	
+
 	virtual void SetData( Panel *panel, KeyValues *kv, PanelAnimationMapEntry *entry )
 	{
 		void *data = ( void * )( (*entry->m_pfnLookup)( panel ) );
-		
+
 		CHudTextureHandle *pHandle = ( CHudTextureHandle * )data;
 
 		const char *texturename = kv->GetString( entry->name() );
@@ -191,7 +187,7 @@ bool VGui_Startup( CreateInterfaceFn appSystemFactory )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 void VGui_CreateGlobalPanels( void )
 {
@@ -216,9 +212,6 @@ void VGui_CreateGlobalPanels( void )
 #ifndef _X360
 	// Create mp3 player off of tool parent panel
 	MP3Player_Create( toolParent );
-#endif
-#ifdef SIXENSE
-	g_pSixenseInput->CreateGUI( gameToolParent );
 #endif
 }
 
@@ -265,7 +258,7 @@ void VGui_PreRender()
 	if ( IsPC() )
 	{
 		loadingdisc->SetLoadingVisible( engine->IsDrawingLoadingImage() && !engine->IsPlayingDemo() );
-		
+
 		bool bShowPausedImage = !enginevgui->IsGameUIVisible() && cl_showpausedimage.GetBool() && engine->IsPaused() && !engine->IsTakingScreenshot() && !engine->IsPlayingDemo();
 #if !defined( TF_CLIENT_DLL )
 		loadingdisc->SetPausedVisible( bShowPausedImage, engine->GetPausedExpireTime()  );
@@ -281,8 +274,8 @@ void VGui_PostRender()
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : cl_panelanimation - 
+// Purpose:
+// Input  : cl_panelanimation -
 //-----------------------------------------------------------------------------
 CON_COMMAND( cl_panelanimation, "Shows panel animation variables: <panelname | blank for all panels>." )
 {
