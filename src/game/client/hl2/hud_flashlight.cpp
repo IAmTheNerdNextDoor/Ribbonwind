@@ -1,6 +1,6 @@
 //========= Copyright Valve Corporation, All rights reserved. ============//
 //
-// Purpose: 
+// Purpose:
 //
 //=============================================================================//
 
@@ -9,7 +9,6 @@
 #include "hud_numericdisplay.h"
 #include <vgui_controls/Panel.h>
 #include "hud.h"
-#include "hud_suitpower.h"
 #include "hud_macros.h"
 #include "iclientmode.h"
 #include <vgui_controls/AnimationController.h>
@@ -36,12 +35,12 @@ protected:
 private:
 	void SetFlashlightState( bool flashlightOn );
 	void Reset( void );
-	
+
 	bool	m_bFlashlightOn;
 	CPanelAnimationVar( vgui::HFont, m_hFont, "Font", "WeaponIconsSmall" );
 	CPanelAnimationVarAliasType( float, m_IconX, "icon_xpos", "4", "proportional_float" );
 	CPanelAnimationVarAliasType( float, m_IconY, "icon_ypos", "4", "proportional_float" );
-	
+
 	CPanelAnimationVarAliasType( float, m_flBarInsetX, "BarInsetX", "2", "proportional_float" );
 	CPanelAnimationVarAliasType( float, m_flBarInsetY, "BarInsetY", "18", "proportional_float" );
 
@@ -49,7 +48,7 @@ private:
 	CPanelAnimationVarAliasType( float, m_flBarHeight, "BarHeight", "2", "proportional_float" );
 	CPanelAnimationVarAliasType( float, m_flBarChunkWidth, "BarChunkWidth", "2", "proportional_float" );
 	CPanelAnimationVarAliasType( float, m_flBarChunkGap, "BarChunkGap", "2", "proportional_float" );
-};	
+};
 
 using namespace vgui;
 
@@ -69,8 +68,8 @@ CHudFlashlight::CHudFlashlight( const char *pElementName ) : CHudElement( pEleme
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : *pScheme - 
+// Purpose:
+// Input  : *pScheme -
 //-----------------------------------------------------------------------------
 void CHudFlashlight::ApplySchemeSettings( vgui::IScheme *pScheme )
 {
@@ -82,7 +81,7 @@ void CHudFlashlight::ApplySchemeSettings( vgui::IScheme *pScheme )
 //-----------------------------------------------------------------------------
 void CHudFlashlight::Reset( void )
 {
-	g_pClientMode->GetViewportAnimationController()->StartAnimationSequence( "SuitFlashlightOn" ); 
+	g_pClientMode->GetViewportAnimationController()->StartAnimationSequence( "SuitFlashlightOn" );
 }
 
 //-----------------------------------------------------------------------------
@@ -147,7 +146,7 @@ void CHudFlashlight::Paint()
 		surface()->DrawFilledRect( xpos, ypos, xpos + m_flBarChunkWidth, ypos + m_flBarHeight );
 		xpos += (m_flBarChunkWidth + m_flBarChunkGap);
 	}
-	
+
 	// Be even less transparent than we already are
 	clrFlashlight[3] = clrFlashlight[3] / 8;
 

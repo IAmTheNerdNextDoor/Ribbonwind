@@ -112,14 +112,12 @@ $Project "Client (Episodic)"
 			$File	"hl2\hud_flashlight.cpp"
 			$File	"hl2\hud_locator.cpp"
 			$File	"hl2\hud_health.cpp"
-			$File	"hl2\hud_poisondamageindicator.cpp"			
+			$File	"hl2\hud_poisondamageindicator.cpp"
 			$File	"hud_posture.cpp"
 			$File	"hl2\hud_quickinfo.cpp"
 			$File	"hl2\hud_radar.cpp"
 			$File	"hl2\hud_radar.h"
 			$File	"hud_squadstatus.cpp"
-			$File	"hl2\hud_suitpower.cpp"
-			$File	"hl2\hud_suitpower.h"
 			$File	"hl2\hud_weaponselection.cpp"
 			$File	"hl2\hud_zoom.cpp"
 			$File	"hl2\shieldproxy.cpp"
@@ -128,5 +126,5 @@ $Project "Client (Episodic)"
 			$File	"episodic\c_npc_puppet.cpp"
 		}
 	}
-	
+
 }

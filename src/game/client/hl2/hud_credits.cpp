@@ -1,6 +1,6 @@
 //========= Copyright Valve Corporation, All rights reserved. ============//
 //
-// Purpose: 
+// Purpose:
 //
 //=============================================================================//
 
@@ -9,7 +9,6 @@
 #include "hud_numericdisplay.h"
 #include <vgui_controls/Panel.h>
 #include "hud.h"
-#include "hud_suitpower.h"
 #include "hud_macros.h"
 #include "iclientmode.h"
 #include <vgui_controls/AnimationController.h>
@@ -69,14 +68,14 @@ public:
 	void MsgFunc_CreditsMsg( bf_read &msg );
 	void MsgFunc_LogoTimeMsg( bf_read &msg );
 
-	virtual bool	ShouldDraw( void ) 
-	{ 
+	virtual bool	ShouldDraw( void )
+	{
 		g_bRollingCredits = IsActive();
 
 		if ( g_bRollingCredits && m_iCreditsType == CREDITS_INTRO )
 			 g_bRollingCredits = false;
 
-		return IsActive(); 
+		return IsActive();
 	}
 
 protected:
@@ -133,7 +132,7 @@ private:
 	char m_szLogo2[256];
 
 	Color m_cColor;
-};	
+};
 
 
 void CHudCredits::PrepareCredits( const char *pKeyName )
@@ -192,7 +191,7 @@ void CHudCredits::Clear( void )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 void CHudCredits::Init()
 {
@@ -211,7 +210,7 @@ void CHudCredits::ReadNames( KeyValues *pKeyValue )
 
 	// Now try and parse out each act busy anim
 	KeyValues *pKVNames = pKeyValue->GetFirstSubKey();
-	
+
 	while ( pKVNames )
 	{
 		creditname_t Credits;
@@ -303,11 +302,11 @@ void CHudCredits::DrawOutroCreditsName( void )
 			if ( m_bLastOneInPlace == false )
 			{
 				pCredit->flYPos -= gpGlobals->frametime * ( (float)g_iCreditsPixelHeight / m_flScrollTime );
-		
+
 				if ( (int)pCredit->flYPos + ( iFontTall / 2 ) <= iTall / 2 )
 				{
 					m_bLastOneInPlace = true;
-					
+
 					// 360 certification requires that we not hold a static image too long.
 					m_flFadeTime = gpGlobals->curtime + ( IsConsole() ? 2.0f : 10.0f );
 				}
@@ -335,15 +334,15 @@ void CHudCredits::DrawOutroCreditsName( void )
 		{
 			pCredit->flYPos -= gpGlobals->frametime * ( (float)g_iCreditsPixelHeight / m_flScrollTime );
 		}
-		
+
 		if ( pCredit->bActive == false )
 			 continue;
-			
+
 		surface()->DrawSetTextFont( m_hTFont );
 		surface()->DrawSetTextColor( cColor[0], cColor[1], cColor[2], cColor[3]  );
-		
+
 		wchar_t unicode[256];
-		
+
 		if ( pCredit->szCreditName[0] == '#' )
 		{
 			g_pVGuiLocalize->ConstructString( unicode, sizeof(unicode), g_pVGuiLocalize->Find(pCredit->szCreditName), 0 );
@@ -353,7 +352,7 @@ void CHudCredits::DrawOutroCreditsName( void )
 			g_pVGuiLocalize->ConvertANSIToUnicode( pCredit->szCreditName, unicode, sizeof( unicode ) );
 		}
 
-		int iStringWidth = GetStringPixelWidth( unicode, m_hTFont ); 
+		int iStringWidth = GetStringPixelWidth( unicode, m_hTFont );
 
 		surface()->DrawSetTextPos( ( iWidth / 2 ) - ( iStringWidth / 2 ), pCredit->flYPos );
 		surface()->DrawUnicodeString( unicode );
@@ -438,14 +437,14 @@ void CHudCredits::DrawLogo( void )
 
 	Color cColor = m_TextColor;
 	cColor[3] = m_Alpha;
-				
+
 	surface()->DrawSetTextFont( m_hTFont );
 	surface()->DrawSetTextColor( cColor[0], cColor[1], cColor[2], cColor[3]  );
-	
+
 	wchar_t unicode[256];
 	g_pVGuiLocalize->ConvertANSIToUnicode( m_szLogo, unicode, sizeof( unicode ) );
 
-	int iStringWidth = GetStringPixelWidth( unicode, m_hTFont ); 
+	int iStringWidth = GetStringPixelWidth( unicode, m_hTFont );
 
 	surface()->DrawSetTextPos( ( iWidth / 2 ) - ( iStringWidth / 2 ), ( iTall / 2 ) - ( iFontTall / 2 ) );
 	surface()->DrawUnicodeString( unicode );
@@ -454,7 +453,7 @@ void CHudCredits::DrawLogo( void )
 	{
 		g_pVGuiLocalize->ConvertANSIToUnicode( m_szLogo2, unicode, sizeof( unicode ) );
 
-		iStringWidth = GetStringPixelWidth( unicode, m_hTFont ); 
+		iStringWidth = GetStringPixelWidth( unicode, m_hTFont );
 
 		surface()->DrawSetTextPos( ( iWidth / 2 ) - ( iStringWidth / 2 ), ( iTall / 2 ) + ( iFontTall / 2 ));
 		surface()->DrawUnicodeString( unicode );
@@ -462,7 +461,7 @@ void CHudCredits::DrawLogo( void )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 float CHudCredits::FadeBlend( float fadein, float fadeout, float hold, float localTime )
 {
@@ -496,7 +495,7 @@ void CHudCredits::DrawIntroCreditsName( void )
 {
 	if ( m_CreditsList.Count() == 0 )
 		 return;
-	
+
 	// fill the screen
 	int iWidth, iTall;
 	GetHudSize(iWidth, iTall);
@@ -511,7 +510,7 @@ void CHudCredits::DrawIntroCreditsName( void )
 
 		if ( pCredit->bActive == false )
 			 continue;
-				
+
 		vgui::HScheme scheme = vgui::scheme()->GetScheme( "ClientScheme" );
 		vgui::HFont m_hTFont = vgui::scheme()->GetIScheme(scheme)->GetFont( pCredit->szFontName );
 
@@ -519,16 +518,16 @@ void CHudCredits::DrawIntroCreditsName( void )
 
 		surface()->DrawSetTextFont( m_hTFont );
 		surface()->DrawSetTextColor( m_cColor[0], m_cColor[1], m_cColor[2], FadeBlend( m_flFadeInTime, m_flFadeOutTime, m_flFadeHoldTime + pCredit->flTimeAdd, localTime ) * m_cColor[3] );
-		
+
 		wchar_t unicode[256];
 		g_pVGuiLocalize->ConvertANSIToUnicode( pCredit->szCreditName, unicode, sizeof( unicode ) );
 
 		surface()->DrawSetTextPos( XRES( pCredit->flXPos ), YRES( pCredit->flYPos ) );
 		surface()->DrawUnicodeString( unicode );
-		
+
 		if ( m_flLogoTime > gpGlobals->curtime )
 			 continue;
-		
+
 		if ( pCredit->flTime - m_flNextStartTime <= gpGlobals->curtime )
 		{
 			if ( m_CreditsList.IsValidIndex( i + 3 ) )
@@ -627,7 +626,7 @@ void CHudCredits::PrepareLine( vgui::HFont hFont, char const *pchLine )
 void CHudCredits::PrepareOutroCredits( void )
 {
 	PrepareCredits( "OutroCreditsNames" );
-	
+
 	if ( m_CreditsList.Count() == 0 )
 		 return;
 
@@ -679,7 +678,7 @@ void CHudCredits::PrepareIntroCredits( void )
 
 		pCredit->flYPos = m_flY + ( iSlot * surface()->GetFontTall ( m_hTFont ) );
 		pCredit->flXPos = m_flX;
-				
+
 		if ( i < 3 )
 		{
 			pCredit->bActive = true;
@@ -731,5 +730,3 @@ void CHudCredits::MsgFunc_LogoTimeMsg( bf_read &msg )
 	m_iCreditsType = CREDITS_LOGO;
 	PrepareLogo( msg.ReadFloat() );
 }
-
-
