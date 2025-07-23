@@ -15,7 +15,6 @@ $Project "captioncompiler"
 
 $Project "client"
 {
-	"game\client\client_tf.vpc"			[$TF]
 	"game\client\client_hl2mp.vpc"		[$HL2MP]
 }
 
@@ -27,7 +26,6 @@ $Project "fgdlib"
 $Project "game_shader_generic_example"
 {
 	"materialsystem\stdshaders\game_shader_generic_example_hl2mp.vpc" [$HL2MP]
-	"materialsystem\stdshaders\game_shader_generic_example_tf.vpc" [$TF]
 }
 
 // Use this project if you want to override all std shaders with your own.
@@ -35,7 +33,6 @@ $Project "game_shader_generic_example"
 $Project "game_shader_generic_std"
 {
 	"materialsystem\stdshaders\game_shader_generic_std_hl2mp.vpc" [$HL2MP]
-	"materialsystem\stdshaders\game_shader_generic_std_tf.vpc" [$TF]
 }
 
 $Project "glview"
@@ -50,14 +47,12 @@ $Project "height2normal"
 
 $Project "server"
 {
-	"game\server\server_tf.vpc"			[$TF]
 	"game\server\server_hl2mp.vpc"		[$HL2MP]
 }
 
 $Project "launcher_main"
 {
 	"launcher_main\launcher_main_mod_hl2mp.vpc" [$HL2MP]
-	"launcher_main\launcher_main_mod_tf.vpc" [$TF]
 }
 
 $Project "mathlib"
@@ -149,4 +144,3 @@ $Project "vvis_launcher"
 {
 	"utils\vvis_launcher\vvis_launcher.vpc" [$WINDOWS]
 }
-
